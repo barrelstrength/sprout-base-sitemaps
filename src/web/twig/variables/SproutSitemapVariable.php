@@ -20,11 +20,11 @@ use craft\fields\PlainText;
 use craft\fields\Assets;
 
 /**
- * Class SproutSeoVariable
+ * Class SproutSitemapVariable
  *
  * @package Craft
  */
-class SproutSeoVariable
+class SproutSitemapVariable
 {
     /**
      * @var SproutSitemap
@@ -36,7 +36,7 @@ class SproutSeoVariable
      */
     public function __construct()
     {
-        $this->plugin = Craft::$app->plugins->getPlugin('sprout-base-sitemaps');
+        $this->plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
     }
 
     /**
@@ -44,7 +44,7 @@ class SproutSeoVariable
      */
     public function getSettings()
     {
-        return Craft::$app->plugins->getPlugin('sprout-base-sitemaps')->getSettings();
+        return Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
     }
 
     /**
@@ -63,6 +63,7 @@ class SproutSeoVariable
      * @param $string
      *
      * @return DateTime
+     * @throws \Exception
      */
     public function getDate($string)
     {

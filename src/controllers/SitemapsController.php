@@ -10,6 +10,7 @@ namespace barrelstrength\sproutbasesitemaps\controllers;
 use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\sectiontypes\NoSection;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutSitemaps;
 use craft\web\Controller;
 use Craft;
@@ -36,7 +37,7 @@ class SitemapsController extends Controller
         /**
          * @var Settings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-base-sitemaps')->getSettings();
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
         $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $pluginSettings->enableMultilingualSitemaps;
 
         // Get Enabled Site IDs. Remove any disabled IDS.
@@ -103,9 +104,9 @@ class SitemapsController extends Controller
             $firstSiteInGroup = $currentSite;
         }
 
-        $urlEnabledSectionTypes = SproutSitemaps::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($currentSite->id);
+        $urlEnabledSectionTypes = SproutBaseSitemaps::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($currentSite->id);
 
-        $customSections = SproutSitemaps::$app->sitemaps->getCustomSitemapSections($currentSite->id);
+        $customSections = SproutBaseSitemaps::$app->sitemaps->getCustomSitemapSections($currentSite->id);
 
         return $this->renderTemplate('sprout-base-sitemaps/sitemaps', [
             'currentSite' => $currentSite,
@@ -145,7 +146,7 @@ class SitemapsController extends Controller
 
         if (!$sitemapSection) {
             if ($sitemapSectionId) {
-                $sitemapSection = SproutSitemaps::$app->sitemaps->getSitemapSectionById($sitemapSectionId);
+                $sitemapSection = SproutBaseSitemaps::$app->sitemaps->getSitemapSectionById($sitemapSectionId);
             } else {
                 $sitemapSection = new SitemapSection();
                 $sitemapSection->siteId = $currentSite->id;
@@ -193,7 +194,7 @@ class SitemapsController extends Controller
         $sitemapSection->changeFrequency = Craft::$app->getRequest()->getBodyParam('changeFrequency');
         $sitemapSection->enabled = Craft::$app->getRequest()->getBodyParam('enabled');
 
-        if (!SproutSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection)) {
+        if (!SproutBaseSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection)) {
             if (Craft::$app->request->getAcceptsJson()) {
                 return $this->asJson([
                     'errors' => $sitemapSection->getErrors(),
@@ -233,7 +234,7 @@ class SitemapsController extends Controller
 
         $sitemapSectionId = Craft::$app->getRequest()->getRequiredBodyParam('id');
 
-        $result = SproutSitemaps::$app->sitemaps->deleteSitemapSectionById($sitemapSectionId);
+        $result = SproutBaseSitemaps::$app->sitemaps->deleteSitemapSectionById($sitemapSectionId);
 
         if (Craft::$app->request->getAcceptsJson()) {
             return $this->asJson([

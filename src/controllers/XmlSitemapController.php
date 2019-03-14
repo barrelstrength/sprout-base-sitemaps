@@ -9,6 +9,7 @@ namespace barrelstrength\sproutbasesitemaps\controllers;
 
 
 use barrelstrength\sproutbasesitemaps\models\Settings;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutSitemaps;
 use craft\web\Controller;
 
@@ -45,11 +46,11 @@ class XmlSitemapController extends Controller
         /**
          * @var Settings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-base-sitemaps')->getSettings();
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
         $isMultilingualSitemap = $pluginSettings->enableMultilingualSitemaps;
 
         if (Craft::$app->getIsMultiSite() && $isMultilingualSitemap) {
-            $sitesInGroup = SproutSitemaps::$app->xmlSitemap->getCurrentSitemapSites();
+            $sitesInGroup = SproutBaseSitemaps::$app->xmlSitemap->getCurrentSitemapSites();
             $firstSiteInGroup = $sitesInGroup[0];
 
             // Only render sitemaps for the primary site in a group
@@ -68,27 +69,27 @@ class XmlSitemapController extends Controller
         switch ($sitemapKey) {
             // Generate Sitemap Index
             case '':
-                $sitemapIndexUrls = SproutSitemaps::$app->xmlSitemap->getSitemapIndex($siteId);
+                $sitemapIndexUrls = SproutBaseSitemaps::$app->xmlSitemap->getSitemapIndex($siteId);
                 break;
 
             // Prepare Singles Sitemap
             case 'singles':
-                $elements = SproutSitemaps::$app->xmlSitemap->getDynamicSitemapElements('singles', $pageNumber, $siteId);
+                $elements = SproutBaseSitemaps::$app->xmlSitemap->getDynamicSitemapElements('singles', $pageNumber, $siteId);
                 break;
 
             // Prepare Custom Pages Sitemap
             case 'custom-pages':
                 if (count($multiSiteSiteIds)) {
-                    $elements = SproutSitemaps::$app->xmlSitemap->getCustomSectionUrlsForMultipleIds($multiSiteSiteIds, $sitesInGroup);
+                    $elements = SproutBaseSitemaps::$app->xmlSitemap->getCustomSectionUrlsForMultipleIds($multiSiteSiteIds, $sitesInGroup);
                 } else {
-                    $elements = SproutSitemaps::$app->xmlSitemap->getCustomSectionUrls($siteId);
+                    $elements = SproutBaseSitemaps::$app->xmlSitemap->getCustomSectionUrls($siteId);
                 }
 
                 break;
 
             // Prepare URL-Enabled Section Sitemap
             default:
-                $elements = SproutSitemaps::$app->xmlSitemap->getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId);
+                $elements = SproutBaseSitemaps::$app->xmlSitemap->getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId);
         }
 
         $headers = Craft::$app->getResponse()->getHeaders();

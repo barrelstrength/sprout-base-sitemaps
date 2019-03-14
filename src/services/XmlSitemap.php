@@ -12,6 +12,7 @@ use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\sectiontypes\Entry;
 use barrelstrength\sproutbasesitemaps\sectiontypes\NoSection;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutSitemaps;
 use craft\elements\db\ElementQuery;
 use yii\base\Component;
@@ -41,7 +42,7 @@ class XmlSitemap extends Component
 
         $totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
-        $urlEnabledSectionTypes = SproutSitemaps::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($siteId);
+        $urlEnabledSectionTypes = SproutBaseSitemaps::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($siteId);
 
         foreach ($urlEnabledSectionTypes as $urlEnabledSectionType) {
             $urlEnabledSectionTypeId = $urlEnabledSectionType->getElementIdColumnName();
@@ -141,12 +142,12 @@ class XmlSitemap extends Component
 
         foreach ($enabledSitemapSections as $sitemapSection) {
 
-            $urlEnabledSectionType = SproutSitemaps::$app->sitemaps->getUrlEnabledSectionTypeByType($sitemapSection->type);
+            $urlEnabledSectionType = SproutBaseSitemaps::$app->sitemaps->getUrlEnabledSectionTypeByType($sitemapSection->type);
             $sectionModel = $urlEnabledSectionType->getById($sitemapSection->urlEnabledSectionId);
 
             foreach ($currentSitemapSites as $site) {
 
-                #$globalMetadata = SproutSitemaps::$app->globalMetadata->getGlobalMetadata($site);
+                #$globalMetadata = SproutBaseSitemaps::$app->globalMetadata->getGlobalMetadata($site);
 
                 $elementMetadataFieldHandle = null;
                 $elements = [];
@@ -182,7 +183,7 @@ class XmlSitemap extends Component
                     // @todo figure out how handle this code
                     /*
                     if ($elementMetadataFieldHandle === null) {
-                        $elementMetadataFieldHandle = SproutSitemaps::$app->elementMetadata->getElementMetadataFieldHandle($element);
+                        $elementMetadataFieldHandle = SproutBaseSitemaps::$app->elementMetadata->getElementMetadataFieldHandle($element);
                     }
 
                     $robots = null;
@@ -258,7 +259,7 @@ class XmlSitemap extends Component
         /**
          * @var Settings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-base-sitemaps')->getSettings();
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
 
         $currentSite = Craft::$app->sites->getCurrentSite();
         $isMultisite = Craft::$app->getIsMultiSite();
@@ -438,7 +439,7 @@ class XmlSitemap extends Component
      */
     public function getTotalElementsPerSitemap($total = 500)
     {
-        $plugin = Craft::$app->plugins->getPlugin('sprout-base-sitemaps');
+        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
         $seoSettings = $plugin->getSettings();
 
         if (isset($seoSettings['totalElementsPerSitemap']) && $seoSettings['totalElementsPerSitemap']) {

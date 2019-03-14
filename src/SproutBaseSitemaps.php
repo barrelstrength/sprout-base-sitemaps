@@ -8,6 +8,8 @@
 namespace barrelstrength\sproutbasesitemaps;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbasesitemaps\controllers\SitemapsController;
+use barrelstrength\sproutbasesitemaps\controllers\XmlSitemapController;
 use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\services\App;
 
@@ -104,6 +106,11 @@ class SproutBaseSitemaps extends Module
             $this->controllerNamespace = 'sproutbasesitemaps\\console\\controllers';
         } else {
             $this->controllerNamespace = 'sproutbasesitemaps\\controllers';
+
+            $this->controllerMap = [
+                'sitemaps' => SitemapsController::class,
+                'xml-sitemap' => XmlSitemapController::class
+            ];
         }
 
         // Setup Template Roots

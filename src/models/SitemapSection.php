@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutbasesitemaps\models;
 
 
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutSitemaps;
 use craft\base\Model;
 use craft\helpers\UrlHelper;
@@ -116,7 +117,7 @@ class SitemapSection extends Model
      */
     public function getUrlEnabledSection()
     {
-        $urlEnabledSectionType = SproutSitemaps::$app->sitemaps->getUrlEnabledSectionTypeByType($this->type);
+        $urlEnabledSectionType = SproutBaseSitemaps::$app->sitemaps->getUrlEnabledSectionTypeByType($this->type);
         $urlEnabledSections = $urlEnabledSectionType->urlEnabledSections;
 
         foreach ($urlEnabledSections as $key => $urlEnabledSection) {

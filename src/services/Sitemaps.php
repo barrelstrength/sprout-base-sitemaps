@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutbasesitemaps\services;
 
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\SproutBaseUris;
 use barrelstrength\sproutbaseuris\base\UrlEnabledSectionType;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
@@ -81,7 +82,7 @@ class Sitemaps extends Component
     public function getSitemapSections(UrlEnabledSectionType $urlEnabledSectionType, $siteId = null)
     {
         $type = get_class($urlEnabledSectionType);
-        $allSitemapSections = SproutSitemaps::$app->sitemaps->getSitemapSectionsByType($type, $siteId);
+        $allSitemapSections = SproutBaseSitemaps::$app->sitemaps->getSitemapSectionsByType($type, $siteId);
 
         $sitemapSections = [];
 
@@ -213,7 +214,7 @@ class Sitemaps extends Component
         /**
          * @var PluginSettings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-base-sitemaps')->getSettings();
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
 
         // Copy this site behavior to the whole group, for the Url-Enabled Sitemaps
         // Custom Sections will be allowed to be unique, even in Multi-Lingual Sitemaps
@@ -345,7 +346,7 @@ class Sitemaps extends Component
              * @var UrlEnabledSectionType $urlEnabledSectionType
              */
             $urlEnabledSectionType = new $urlEnabledSectionType();
-            $sitemapSections = SproutSitemaps::$app->sitemaps->getSitemapSections($urlEnabledSectionType, $siteId);
+            $sitemapSections = SproutBaseSitemaps::$app->sitemaps->getSitemapSections($urlEnabledSectionType, $siteId);
             $allUrlEnabledSections = $urlEnabledSectionType->getAllUrlEnabledSections($siteId);
 
             // Prepare a list of all URL-Enabled Sections for this URL-Enabled Section Type
