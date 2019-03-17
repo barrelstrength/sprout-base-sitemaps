@@ -7,11 +7,11 @@
 
 namespace barrelstrength\sproutbasesitemaps\controllers;
 
-use barrelstrength\sproutbasesitemaps\models\Settings;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
-use barrelstrength\sproutbasesitemaps\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use barrelstrength\sproutbasesitemaps\SproutSitemaps;
+use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
+use barrelstrength\sproutsitemaps\models\Settings;
 use craft\web\Controller;
 use Craft;
 use yii\web\NotFoundHttpException;
@@ -23,17 +23,31 @@ use yii\web\Response;
  */
 class SitemapsController extends Controller
 {
+    private $permissions = [];
+
+    public function init()
+    {
+        $permissionNames = Settings::getSharedPermissions();
+        $currentPluginHandle = Craft::$app->request->getSegment(1);
+        $this->permissions = SproutBase::$app->settings->getSharedPermissions($permissionNames, 'sprout-sitemaps', $currentPluginHandle);
+
+        parent::init();
+    }
+
     /**
      * Renders the Sitemap Index Page
      *
      * @param string|null $siteHandle
      *
      * @return Response
+     * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      * @throws \craft\errors\SiteNotFoundException
      */
     public function actionSitemapIndexTemplate(string $siteHandle = null): Response
     {
+        $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
+
         /**
          * @var Settings $pluginSettings
          */
@@ -129,8 +143,10 @@ class SitemapsController extends Controller
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      */
-    public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null, SitemapSection $sitemapSection = null)
+    public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null, SitemapSection $sitemapSection = null): Response
     {
+        $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
+
         if ($siteHandle === null) {
             throw new NotFoundHttpException('Unable to find site with handle: '.$siteHandle);
         }
@@ -183,6 +199,7 @@ class SitemapsController extends Controller
     public function actionSaveSitemapSection()
     {
         $this->requirePostRequest();
+        $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
         $sitemapSection = new SitemapSection();
         $sitemapSection->id = Craft::$app->getRequest()->getBodyParam('id', null);
@@ -224,13 +241,15 @@ class SitemapsController extends Controller
     /**
      * Deletes a Sitemap Section
      *
-     * @return \yii\web\Response
+     * @return Response
+     * @throws ForbiddenHttpException
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionDeleteSitemapById(): Response
     {
         $this->requirePostRequest();
+        $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
         $sitemapSectionId = Craft::$app->getRequest()->getRequiredBodyParam('id');
 
