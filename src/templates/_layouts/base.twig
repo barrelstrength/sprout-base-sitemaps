@@ -2,5 +2,5 @@
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbasesitemaps\\web\\assets\\base\\BaseAsset") %}
 
-{% set selectedSubnavItem = craft.app.request.getSegment(2) ? craft.app.request.getSegment(2) : 'defaults' %}
+{% set selectedSubnavItem = craft.app.request.getSegment(2) ?: 'defaults' %}
 
