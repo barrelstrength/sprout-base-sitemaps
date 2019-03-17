@@ -120,12 +120,4 @@ class SproutBaseSitemaps extends Module
 
         parent::init();
     }
-
-    /**
-     * @return Settings
-     */
-    protected function createSettingsModel()
-    {
-        return new Settings();
-    }
 }
