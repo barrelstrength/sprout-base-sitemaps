@@ -40,7 +40,7 @@ class SitemapSection extends ActiveRecord
      *
      * @return SitemapSection
      */
-    public function create()
+    public function create(): SitemapSection
     {
         $class = get_class($this);
 

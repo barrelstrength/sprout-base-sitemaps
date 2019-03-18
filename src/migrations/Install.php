@@ -10,7 +10,7 @@ namespace barrelstrength\sproutbasesitemaps\migrations;
 use Craft;
 
 use craft\db\Migration;
-use barrelstrength\sproutbasesitemaps\models\Settings;
+use barrelstrength\sproutsitemaps\models\Settings;
 use craft\services\Plugins;
 
 class Install extends Migration
@@ -24,9 +24,8 @@ class Install extends Migration
      * @return bool
      * @throws \Throwable
      * @throws \craft\errors\SiteNotFoundException
-     * @throws \craft\errors\StructureNotFoundException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $this->createTables();
         $this->insertDefaultSettings();
@@ -73,7 +72,7 @@ class Install extends Migration
 
     protected function createIndexes()
     {
-        $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId'], false);
+        $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId']);
     }
 
     protected function addForeignKeys()

@@ -12,6 +12,7 @@ use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutsitemaps\models\Settings;
+use craft\base\Plugin;
 use craft\web\Controller;
 use Craft;
 use yii\web\NotFoundHttpException;
@@ -48,15 +49,15 @@ class SitemapsController extends Controller
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
-        /**
-         * @var Settings $pluginSettings
-         */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
-        $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $pluginSettings->enableMultilingualSitemaps;
+        /** @var Plugin $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+        $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $settings->enableMultilingualSitemaps;
 
         // Get Enabled Site IDs. Remove any disabled IDS.
-        $enabledSiteIds = array_filter($pluginSettings->siteSettings);
-        $enabledSiteGroupIds = array_filter($pluginSettings->groupSettings);
+        $enabledSiteIds = array_filter($settings->siteSettings);
+        $enabledSiteGroupIds = array_filter($settings->groupSettings);
 
         if (!$enableMultilingualSitemaps && empty($enabledSiteIds)) {
             throw new NotFoundHttpException('No Sites are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site for your Sitemap.');
@@ -156,7 +157,7 @@ class SitemapsController extends Controller
         $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
 
         // Make sure the user has permission to edit that site
-        if (!in_array($currentSite->id, $editableSiteIds, false)) {
+        if ($currentSite !== null && !in_array($currentSite->id, $editableSiteIds, false)) {
             throw new ForbiddenHttpException('User not permitted to edit content for this site.');
         }
 
@@ -202,9 +203,9 @@ class SitemapsController extends Controller
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
         $sitemapSection = new SitemapSection();
-        $sitemapSection->id = Craft::$app->getRequest()->getBodyParam('id', null);
+        $sitemapSection->id = Craft::$app->getRequest()->getBodyParam('id');
         $sitemapSection->siteId = Craft::$app->getRequest()->getBodyParam('siteId');
-        $sitemapSection->urlEnabledSectionId = Craft::$app->getRequest()->getBodyParam('urlEnabledSectionId', null);
+        $sitemapSection->urlEnabledSectionId = Craft::$app->getRequest()->getBodyParam('urlEnabledSectionId');
         $sitemapSection->uri = Craft::$app->getRequest()->getBodyParam('uri');
         $sitemapSection->type = Craft::$app->getRequest()->getBodyParam('type');
         $sitemapSection->priority = Craft::$app->getRequest()->getBodyParam('priority');

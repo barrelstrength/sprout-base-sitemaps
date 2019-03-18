@@ -9,7 +9,7 @@ namespace barrelstrength\sproutbasesitemaps\models;
 
 
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use barrelstrength\sproutbasesitemaps\SproutSitemaps;
+use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use craft\base\Model;
 use craft\helpers\UrlHelper;
 use Craft;
@@ -21,7 +21,7 @@ use Craft;
  * sitemap tab. The attributes are a subset of the Metadata
  *
  * @property null|\craft\models\Site                                          $site
- * @property null|\barrelstrength\sproutbasesitemaps\models\UrlEnabledSection $urlEnabledSection
+ * @property null|\barrelstrength\sproutbaseuris\models\UrlEnabledSection $urlEnabledSection
  */
 class SitemapSection extends Model
 {
@@ -132,7 +132,7 @@ class SitemapSection extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['uri'], 'sectionUri', 'on' => 'customSection'],

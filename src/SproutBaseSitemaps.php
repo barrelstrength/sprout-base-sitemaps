@@ -10,7 +10,6 @@ namespace barrelstrength\sproutbasesitemaps;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbasesitemaps\controllers\SitemapsController;
 use barrelstrength\sproutbasesitemaps\controllers\XmlSitemapController;
-use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\services\App;
 
 use craft\events\RegisterTemplateRootsEvent;

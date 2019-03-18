@@ -13,16 +13,16 @@ use barrelstrength\sproutbaseuris\base\UrlEnabledSectionType;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutbasesitemaps\SproutSitemaps;
-use barrelstrength\sproutbasesitemaps\models\Settings as PluginSettings;
+use barrelstrength\sproutsitemaps\models\Settings;
 use craft\base\Element;
+use craft\base\Plugin;
 use craft\errors\SiteNotFoundException;
 use yii\base\Component;
 use craft\db\Query;
 use Craft;
 use barrelstrength\sproutbasesitemaps\records\SitemapSection as SitemapSectionRecord;
 use yii\db\Exception;
-
+use yii\web\NotFoundHttpException;
 
 /**
  *
@@ -47,7 +47,7 @@ class Sitemaps extends Component
      *
      * @return array
      */
-    public function getCustomSitemapSections($siteId)
+    public function getCustomSitemapSections($siteId): array
     {
         $customSections = (new Query())
             ->select('*')
@@ -79,7 +79,7 @@ class Sitemaps extends Component
      * @return array
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function getSitemapSections(UrlEnabledSectionType $urlEnabledSectionType, $siteId = null)
+    public function getSitemapSections(UrlEnabledSectionType $urlEnabledSectionType, $siteId = null): array
     {
         $type = get_class($urlEnabledSectionType);
         $allSitemapSections = SproutBaseSitemaps::$app->sitemaps->getSitemapSectionsByType($type, $siteId);
@@ -105,7 +105,7 @@ class Sitemaps extends Component
      * @return array
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function getSitemapSectionsByType($type, $siteId = null)
+    public function getSitemapSectionsByType($type, $siteId = null): array
     {
         if ($siteId === null) {
             throw new SiteNotFoundException('Unable to find site. $siteId must not be null');
@@ -211,15 +211,22 @@ class Sitemaps extends Component
         // update id on model (for new records)
         $sitemapSection->id = $sitemapSectionRecord->id;
 
-        /**
-         * @var PluginSettings $pluginSettings
-         */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
+        /** @var Plugin $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
 
         // Copy this site behavior to the whole group, for the Url-Enabled Sitemaps
         // Custom Sections will be allowed to be unique, even in Multi-Lingual Sitemaps
-        if ($pluginSettings->enableMultilingualSitemaps && $sitemapSectionRecord->type !== NoSection::class) {
+        if ($settings->enableMultilingualSitemaps && $sitemapSectionRecord->type !== NoSection::class) {
             $site = Craft::$app->getSites()->getSiteById($sitemapSectionRecord->siteId);
+
+            if (!$site) {
+                throw new NotFoundHttpException(Craft::t('sprout-base-sitemaps', 'Unable to find Site with id: {id}', [
+                    'id' => $sitemapSectionRecord->siteId
+                ]));
+            }
+
             $sitesInGroup = Craft::$app->getSites()->getSitesByGroupId($site->groupId);
 
             $siteIds = [];
@@ -270,7 +277,7 @@ class Sitemaps extends Component
      * @return bool
      * @throws Exception
      */
-    public function deleteSitemapSectionById($id = null)
+    public function deleteSitemapSectionById($id = null): bool
     {
         $sitemapSectionRecord = SitemapSectionRecord::findOne($id);
 
@@ -291,7 +298,7 @@ class Sitemaps extends Component
      * @return string
      * @throws \yii\base\Exception
      */
-    public function generateUniqueKey()
+    public function generateUniqueKey(): string
     {
         $key = Craft::$app->getSecurity()->generateRandomString(12);
 
@@ -317,7 +324,7 @@ class Sitemaps extends Component
      * @return UrlEnabledSectionType[]
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function getUrlEnabledSectionTypesForSitemaps($siteId = null)
+    public function getUrlEnabledSectionTypesForSitemaps($siteId = null): array
     {
         $this->prepareUrlEnabledSectionTypesForSitemaps($siteId);
 

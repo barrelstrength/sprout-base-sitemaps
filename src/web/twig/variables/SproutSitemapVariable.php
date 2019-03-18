@@ -7,17 +7,11 @@
 
 namespace barrelstrength\sproutbasesitemaps\web\twig\variables;
 
-use barrelstrength\sproutbasesitemaps\helpers\OptimizeHelper;
-use barrelstrength\sproutbasesitemaps\models\Settings;
-use barrelstrength\sproutbasesitemaps\SproutSitemaps;
+use barrelstrength\sproutsitemaps\SproutSitemaps;
 use Craft;
-use craft\base\Field;
-use craft\elements\Asset;
 
-use craft\models\Site;
+use craft\base\Plugin;
 use DateTime;
-use craft\fields\PlainText;
-use craft\fields\Assets;
 
 /**
  * Class SproutSitemapVariable
@@ -27,7 +21,7 @@ use craft\fields\Assets;
 class SproutSitemapVariable
 {
     /**
-     * @var SproutSitemap
+     * @var SproutSitemaps
      */
     protected $plugin;
 
@@ -44,7 +38,10 @@ class SproutSitemapVariable
      */
     public function getSettings()
     {
-        return Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
+        /** @var Plugin $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+
+        return $plugin->getSettings();
     }
 
     /**
@@ -65,7 +62,7 @@ class SproutSitemapVariable
      * @return DateTime
      * @throws \Exception
      */
-    public function getDate($string)
+    public function getDate($string): DateTime
     {
         return new DateTime($string['date'], new \DateTimeZone(Craft::$app->getTimeZone()));
     }
@@ -75,9 +72,7 @@ class SproutSitemapVariable
      */
     public function getSiteIds()
     {
-        $sites = Craft::$app->getSites()->getAllSites();
-
-        return $sites;
+        return Craft::$app->getSites()->getAllSites();
     }
 
     /**
@@ -85,13 +80,13 @@ class SproutSitemapVariable
      *
      * @return bool
      */
-    public function uriHasTags($uri = null)
+    public function uriHasTags($uri = null): bool
     {
-        if (strstr($uri, '{{')) {
+        if (false !== strpos($uri, '{{')) {
             return true;
         }
 
-        if (strstr($uri, '{%')) {
+        if (false !== strpos($uri, '{%')) {
             return true;
         }
 

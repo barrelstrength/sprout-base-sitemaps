@@ -23,7 +23,6 @@ class App extends Component
 
     public function init()
     {
-        ;
         $this->sitemaps = new Sitemaps();
         $this->xmlSitemap = new XmlSitemap();
     }

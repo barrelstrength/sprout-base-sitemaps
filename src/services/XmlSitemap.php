@@ -7,13 +7,14 @@
 
 namespace barrelstrength\sproutbasesitemaps\services;
 
-use barrelstrength\sproutbasesitemaps\helpers\OptimizeHelper;
-use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
-use barrelstrength\sproutbasesitemaps\sectiontypes\Entry;
-use barrelstrength\sproutbasesitemaps\sectiontypes\NoSection;
+use barrelstrength\sproutbaseuris\sectiontypes\Entry;
+use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use barrelstrength\sproutbasesitemaps\SproutSitemaps;
+use barrelstrength\sproutsitemaps\models\Settings;
+use barrelstrength\sproutsitemaps\SproutSitemaps;
+use craft\base\Element;
+use craft\base\Plugin;
 use craft\elements\db\ElementQuery;
 use yii\base\Component;
 use craft\db\Query;
@@ -35,7 +36,7 @@ class XmlSitemap extends Component
      * @return array
      * @throws \yii\base\Exception
      */
-    public function getSitemapIndex($siteId = null)
+    public function getSitemapIndex($siteId = null): array
     {
         $sitemapIndexPages = [];
         $hasSingles = false;
@@ -51,12 +52,11 @@ class XmlSitemap extends Component
                 $sitemapSection = $urlEnabledSection->sitemapSection;
 
                 if ($sitemapSection->enabled) {
-                    /**
-                     * Get Total Elements for this URL-Enabled Section
-                     *
-                     * @var ElementQuery $query
-                     */
-                    $query = $urlEnabledSectionType->getElementType()::find();
+                    $elementClassName = $urlEnabledSectionType->getElementType();
+                    /** @var Element $element */
+                    $element = new $elementClassName();
+                    /** Get Total Elements for this URL-Enabled Section @var ElementQuery $query */
+                    $query = $element::find();
                     $query->{$urlEnabledSectionTypeId}($urlEnabledSection->id);
                     $query->siteId($siteId);
 
@@ -127,7 +127,7 @@ class XmlSitemap extends Component
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
-    public function getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId)
+    public function getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId): array
     {
         $urls = [];
 
@@ -154,7 +154,11 @@ class XmlSitemap extends Component
 
                 if ($urlEnabledSectionType !== null) {
 
-                    $query = $urlEnabledSectionType->getElementType()::find();
+                    $elementClassName = $urlEnabledSectionType->getElementType();
+                    /** @var Element $element */
+                    $element = new $elementClassName();
+                    /** Get Total Elements for this URL-Enabled Section @var ElementQuery $query */
+                    $query = $element::find();
 
                     // Example: $query->sectionId(123)
                     $urlEnabledSectionColumnName = $urlEnabledSectionType->getElementIdColumnName();
@@ -163,7 +167,7 @@ class XmlSitemap extends Component
                     $query->offset($offset);
                     $query->limit($totalElementsPerSitemap);
                     $query->site($site);
-                    $query->enabledForSite(true);
+                    $query->enabledForSite();
 
                     if ($urlEnabledSectionType->getElementLiveStatus()) {
                         $query->status($urlEnabledSectionType->getElementLiveStatus());
@@ -254,12 +258,11 @@ class XmlSitemap extends Component
      * @return array|\craft\models\Site[]
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function getCurrentSitemapSites()
+    public function getCurrentSitemapSites(): array
     {
-        /**
-         * @var Settings $pluginSettings
-         */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-sitemaps')->getSettings();
+        /** @var Plugin $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        $pluginSettings = $plugin->getSettings();
 
         $currentSite = Craft::$app->sites->getCurrentSite();
         $isMultisite = Craft::$app->getIsMultiSite();
@@ -315,8 +318,9 @@ class XmlSitemap extends Component
      *
      * @return array
      * @throws \yii\base\Exception
+     * @throws \Exception
      */
-    public function getCustomSectionUrls($siteId)
+    public function getCustomSectionUrls($siteId): array
     {
         $urls = [];
 
@@ -354,8 +358,9 @@ class XmlSitemap extends Component
      * @param $sitesInGroup
      *
      * @return array
+     * @throws \Exception
      */
-    public function getCustomSectionUrlsForMultipleIds($siteIds, $sitesInGroup)
+    public function getCustomSectionUrlsForMultipleIds($siteIds, $sitesInGroup): array
     {
         $urls = [];
 
@@ -401,7 +406,7 @@ class XmlSitemap extends Component
      *
      * @return array
      */
-    protected function getLocalizedSitemapStructure(array $stack)
+    protected function getLocalizedSitemapStructure(array $stack): array
     {
         // Defining the containing structure
         $structure = [];
@@ -437,13 +442,15 @@ class XmlSitemap extends Component
      *
      * @return int
      */
-    public function getTotalElementsPerSitemap($total = 500)
+    public function getTotalElementsPerSitemap($total = 500): int
     {
+        /** @var Plugin $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
-        $seoSettings = $plugin->getSettings();
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
 
-        if (isset($seoSettings['totalElementsPerSitemap']) && $seoSettings['totalElementsPerSitemap']) {
-            $total = $seoSettings['totalElementsPerSitemap'];
+        if (isset($settings['totalElementsPerSitemap']) && $settings['totalElementsPerSitemap']) {
+            $total = $settings['totalElementsPerSitemap'];
         }
 
         return $total;
@@ -456,7 +463,7 @@ class XmlSitemap extends Component
      *
      * @return array
      */
-    public function removeSlash($uri)
+    public function removeSlash($uri): array
     {
         $slash = '/';
 
