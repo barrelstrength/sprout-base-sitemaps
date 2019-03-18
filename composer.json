@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-base-sitemaps",
   "description": "Common sitemaps libraries for Sprout Plugins for Craft CMS",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "yii-module",
   "license": "proprietary",
   "authors": [
@@ -17,8 +17,8 @@
     "docs": "https://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs"
   },
   "require": {
-    "barrelstrength/sprout-base": "^4.0.5",
-    "barrelstrength/sprout-base-uris": "^1.0.1"
+    "barrelstrength/sprout-base": "^4.0.7",
+    "barrelstrength/sprout-base-uris": "^1.0.2"
   },
   "autoload": {
     "psr-4": {
