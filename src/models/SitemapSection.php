@@ -20,7 +20,7 @@ use Craft;
  * This class is used to manage the ajax updates of the sitemap settings on the
  * sitemap tab. The attributes are a subset of the Metadata
  *
- * @property null|\craft\models\Site                                 $site
+ * @property null|\craft\models\Site                                          $site
  * @property null|\barrelstrength\sproutbasesitemaps\models\UrlEnabledSection $urlEnabledSection
  */
 class SitemapSection extends Model

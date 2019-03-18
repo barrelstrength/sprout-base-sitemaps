@@ -27,7 +27,7 @@
                             })) %}
                             <li>
                                 <a{% if selectedSiteId and siteId == selectedSiteId %} class="sel"{% endif %}
-                                        data-site-id="{{ siteId }}"{% if url %} href="{{ url }}"{% endif %}>
+                                    data-site-id="{{ siteId }}"{% if url %} href="{{ url }}"{% endif %}>
                                     {{ site.name|t('site') }}
                                 </a></li>
                         {% endfor %}

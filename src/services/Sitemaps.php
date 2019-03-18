@@ -186,7 +186,7 @@ class Sitemaps extends Component
             return false;
         }
 
-        if ($sitemapSection->id){
+        if ($sitemapSection->id) {
             $sitemapSectionRecord->id = $sitemapSection->id;
         }
         $sitemapSectionRecord->siteId = $sitemapSection->siteId;

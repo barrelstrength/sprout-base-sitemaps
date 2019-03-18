@@ -349,7 +349,7 @@ class XmlSitemap extends Component
 
     /**
      * Process Custom Pages Sitemaps for Multi-Lingual Sitemaps that can have custom pages from multiple sections
-     * 
+     *
      * @param $siteIds
      * @param $sitesInGroup
      *

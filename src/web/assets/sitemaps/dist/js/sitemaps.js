@@ -110,8 +110,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 
                             if (response.sitemapSection.urlEnabledSectionId) {
                                 newRowId = type + '-' + response.sitemapSection.urlEnabledSectionId;
-                            }
-                            else {
+                            } else {
                                 newRowId = type + '-' + response.sitemapSection.id;
                             }
 
@@ -137,8 +136,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
                             $($sectionInputBase + '[enabled]"]').attr('name', 'sproutseo[sections][' + newRowId + '][enabled]');
 
                             Craft.cp.displayNotice(Craft.t('sprout-base-sitemaps', "Sitemap Metadata saved."));
-                        }
-                        else {
+                        } else {
                             Craft.cp.displayError(Craft.t('sprout-base-sitemaps', 'Unable to save Sitemap Metadata.'));
                         }
                     }
@@ -147,8 +145,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
                 if (this.enabled) {
                     this.status.removeClass('disabled');
                     this.status.addClass('live');
-                }
-                else {
+                } else {
                     this.status.removeClass('live');
                     this.status.addClass('disabled');
                 }
