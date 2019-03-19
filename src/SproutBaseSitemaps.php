@@ -12,8 +12,10 @@ use barrelstrength\sproutbasesitemaps\controllers\SitemapsController;
 use barrelstrength\sproutbasesitemaps\controllers\XmlSitemapController;
 use barrelstrength\sproutbasesitemaps\services\App;
 
+use barrelstrength\sproutbasesitemaps\web\twig\variables\SproutSitemapVariable;
 use craft\events\RegisterTemplateRootsEvent;
 use Craft;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use yii\base\Module;
 use craft\helpers\ArrayHelper;
@@ -115,6 +117,10 @@ class SproutBaseSitemaps extends Module
         // Setup Template Roots
         Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
             $e->roots['sprout-base-sitemaps'] = $this->getBasePath().DIRECTORY_SEPARATOR.'templates';
+        });
+
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
+            $event->sender->set('sproutSitemap', SproutSitemapVariable::class);
         });
 
         parent::init();
