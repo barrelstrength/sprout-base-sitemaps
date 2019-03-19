@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutbasesitemaps\controllers;
 
 
-use barrelstrength\sproutsitemaps\models\Settings;
+use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use craft\base\Plugin;
 use craft\web\Controller;
@@ -46,8 +46,9 @@ class XmlSitemapController extends Controller
         $multiSiteSiteIds = [];
         $sitesInGroup = [];
 
+        $currentPluginHandle = Craft::$app->getRequest()->getSegment(1);
         /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        $plugin = Craft::$app->plugins->getPlugin($currentPluginHandle);
         /** @var Settings $pluginSettings */
         $pluginSettings = $plugin->getSettings();
         $isMultilingualSitemap = $pluginSettings->enableMultilingualSitemaps;

@@ -11,7 +11,7 @@ use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbaseuris\sectiontypes\Entry;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use barrelstrength\sproutsitemaps\models\Settings;
+use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutsitemaps\SproutSitemaps;
 use craft\base\Element;
 use craft\base\Plugin;
@@ -260,8 +260,10 @@ class XmlSitemap extends Component
      */
     public function getCurrentSitemapSites(): array
     {
+        $currentPluginHandle = Craft::$app->getRequest()->getSegment(1);
+        
         /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        $plugin = Craft::$app->plugins->getPlugin($currentPluginHandle);
         $pluginSettings = $plugin->getSettings();
 
         $currentSite = Craft::$app->sites->getCurrentSite();
@@ -444,8 +446,10 @@ class XmlSitemap extends Component
      */
     public function getTotalElementsPerSitemap($total = 500): int
     {
+        $currentPluginHandle = Craft::$app->getRequest()->getSegment(1);
+        
         /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        $plugin = Craft::$app->plugins->getPlugin($currentPluginHandle);
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
 

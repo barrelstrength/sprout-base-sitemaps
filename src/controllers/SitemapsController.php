@@ -11,7 +11,7 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutsitemaps\models\Settings;
+use barrelstrength\sproutbasesitemaps\models\Settings;
 use craft\base\Plugin;
 use craft\web\Controller;
 use Craft;
@@ -49,8 +49,10 @@ class SitemapsController extends Controller
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
+        $currentPluginHandle = Craft::$app->getRequest()->getSegment(1);
+        
         /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        $plugin = Craft::$app->plugins->getPlugin($currentPluginHandle);
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
         $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $settings->enableMultilingualSitemaps;
@@ -129,7 +131,8 @@ class SitemapsController extends Controller
             'editableSiteIds' => $editableSiteIds,
             'enableMultilingualSitemaps' => $enableMultilingualSitemaps,
             'urlEnabledSectionTypes' => $urlEnabledSectionTypes,
-            'customSections' => $customSections
+            'customSections' => $customSections,
+            'pluginSettings' => $settings
         ]);
     }
 
@@ -212,7 +215,9 @@ class SitemapsController extends Controller
         $sitemapSection->changeFrequency = Craft::$app->getRequest()->getBodyParam('changeFrequency');
         $sitemapSection->enabled = Craft::$app->getRequest()->getBodyParam('enabled');
 
-        if (!SproutBaseSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection)) {
+        $currentPluginHandle = Craft::$app->getRequest()->getBodyParam('currentPluginHandle');
+
+        if (!SproutBaseSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection, $currentPluginHandle)) {
             if (Craft::$app->request->getAcceptsJson()) {
                 return $this->asJson([
                     'errors' => $sitemapSection->getErrors(),

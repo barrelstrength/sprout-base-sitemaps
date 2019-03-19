@@ -13,7 +13,7 @@ use barrelstrength\sproutbaseuris\base\UrlEnabledSectionType;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutsitemaps\models\Settings;
+use barrelstrength\sproutbasesitemaps\models\Settings;
 use craft\base\Element;
 use craft\base\Plugin;
 use craft\errors\SiteNotFoundException;
@@ -157,7 +157,7 @@ class Sitemaps extends Component
      * @throws Exception
      * @throws \Throwable
      */
-    public function saveSitemapSection(SitemapSection $sitemapSection): bool
+    public function saveSitemapSection(SitemapSection $sitemapSection, $currentPluginHandle): bool
     {
         $isNewSection = !$sitemapSection->id;
 
@@ -210,9 +210,9 @@ class Sitemaps extends Component
 
         // update id on model (for new records)
         $sitemapSection->id = $sitemapSectionRecord->id;
-
+        
         /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        $plugin = Craft::$app->plugins->getPlugin($currentPluginHandle);
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
 

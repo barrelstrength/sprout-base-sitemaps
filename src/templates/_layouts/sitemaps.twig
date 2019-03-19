@@ -3,7 +3,6 @@
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
 {% set sectionLayout = craft.app.request.getSegment(2) %}
-{% set pluginSettings = craft.sproutSitemap.getSettings() %}
 {% set siteGroup = craft.app.sites.getGroupById(firstSiteInGroup.groupId) %}
 
 {% block content %}
@@ -59,7 +58,8 @@
                         data-type="{{ urlEnabledSectionType.getType() }}"
                         data-url-enabled-section-id="{{ sitemapSection.urlEnabledSectionId }}"
                         data-uri="{{ sitemapSection.uri }}"
-                        data-is-new="{{ sitemapSection.isNew }}">
+                        data-is-new="{{ sitemapSection.isNew }}"
+                        data-current-plugin-handle="{{ craft.app.getRequest().getSegment(1) }}">
 
                         {% block sitemapSectionTableRow %}{% endblock %}
 

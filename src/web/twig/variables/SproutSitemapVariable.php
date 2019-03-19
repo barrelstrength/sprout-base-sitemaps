@@ -21,30 +21,6 @@ use DateTime;
 class SproutSitemapVariable
 {
     /**
-     * @var SproutSitemaps
-     */
-    protected $plugin;
-
-    /**
-     * SproutSeoVariable constructor.
-     */
-    public function __construct()
-    {
-        $this->plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
-    }
-
-    /**
-     * @return \craft\base\Model|null
-     */
-    public function getSettings()
-    {
-        /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
-
-        return $plugin->getSettings();
-    }
-
-    /**
      * @param $id
      *
      * @return \craft\base\ElementInterface|null

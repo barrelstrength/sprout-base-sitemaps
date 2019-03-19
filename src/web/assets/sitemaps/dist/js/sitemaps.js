@@ -38,7 +38,8 @@ if (typeof Craft.SproutSeo === typeof undefined) {
                                 "urlEnabledSectionId": $($row).data('urlEnabledSectionId'),
                                 "type": $($row).data('type')
                             }
-                        }
+                        },
+                        "currentPluginHandle": $($row).data('currentPluginHandle')
                     };
 
                     Craft.postActionRequest('sprout-base-sitemaps/sitemaps/save-sitemap-section', data, $.proxy(function(response, textStatus) {
@@ -97,7 +98,8 @@ if (typeof Craft.SproutSeo === typeof undefined) {
                     "priority": $('select[name="sproutseo[sections][' + rowId + '][priority]"]').val(),
                     "changeFrequency": $('select[name="sproutseo[sections][' + rowId + '][changeFrequency]"]').val(),
                     "enabled": this.enabled,
-                    "siteId": siteId
+                    "siteId": siteId,
+                    "currentPluginHandle": $($row).data('currentPluginHandle')
                 };
 
                 Craft.postActionRequest('sprout-base-sitemaps/sitemaps/save-sitemap-section', data, $.proxy(function(response, textStatus) {
