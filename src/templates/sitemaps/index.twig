@@ -10,13 +10,13 @@
             {% include "sprout-base-sitemaps/sitemaps/_sitegroupmenu" with {
                 selectedSiteId: currentSite.id,
                 siteIds: editableSiteIds,
-                urlFormat: "sprout-base-sitemaps/sitemaps/{handle}"
+                urlFormat: pluginHandle ~ "/sitemaps/{handle}"
             } %}
         {% else %}
             {% include "_elements/sitemenu" with {
                 selectedSiteId: currentSite.id,
                 siteIds: editableSiteIds,
-                urlFormat: "sprout-base-sitemaps/sitemaps/{handle}"
+                urlFormat: pluginHandle ~ "/sitemaps/{handle}"
             } %}
         {% endif %}
     {% endif %}

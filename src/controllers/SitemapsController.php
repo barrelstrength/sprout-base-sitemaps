@@ -29,8 +29,8 @@ class SitemapsController extends Controller
     public function init()
     {
         $permissionNames = Settings::getSharedPermissions();
-        $currentPluginHandle = Craft::$app->request->getSegment(1);
-        $this->permissions = SproutBase::$app->settings->getSharedPermissions($permissionNames, 'sprout-sitemaps', $currentPluginHandle);
+        $pluginHandle = Craft::$app->request->getSegment(1);
+        $this->permissions = SproutBase::$app->settings->getSharedPermissions($permissionNames, 'sprout-sitemaps', $pluginHandle);
 
         parent::init();
     }
@@ -38,6 +38,7 @@ class SitemapsController extends Controller
     /**
      * Renders the Sitemap Index Page
      *
+     * @param string      $pluginHandle
      * @param string|null $siteHandle
      *
      * @return Response
@@ -45,14 +46,12 @@ class SitemapsController extends Controller
      * @throws NotFoundHttpException
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionSitemapIndexTemplate(string $siteHandle = null): Response
+    public function actionSitemapIndexTemplate(string $pluginHandle, string $siteHandle = null): Response
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
-
-        $currentPluginHandle = Craft::$app->getRequest()->getSegment(1);
         
         /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin($currentPluginHandle);
+        $plugin = Craft::$app->plugins->getPlugin($pluginHandle);
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
         $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $settings->enableMultilingualSitemaps;
@@ -132,13 +131,15 @@ class SitemapsController extends Controller
             'enableMultilingualSitemaps' => $enableMultilingualSitemaps,
             'urlEnabledSectionTypes' => $urlEnabledSectionTypes,
             'customSections' => $customSections,
-            'pluginSettings' => $settings
+            'pluginSettings' => $settings,
+            'pluginHandle' => $pluginHandle
         ]);
     }
 
     /**
      * Renders a Sitemap Edit Page
      *
+     * @param string              $pluginHandle
      * @param int|null            $sitemapSectionId
      * @param string|null         $siteHandle
      * @param SitemapSection|null $sitemapSection
@@ -147,7 +148,7 @@ class SitemapsController extends Controller
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      */
-    public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null, SitemapSection $sitemapSection = null): Response
+    public function actionSitemapEditTemplate(string $pluginHandle, int $sitemapSectionId = null, string $siteHandle = null, SitemapSection $sitemapSection = null): Response
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
@@ -174,7 +175,7 @@ class SitemapsController extends Controller
             }
         }
 
-        $continueEditingUrl = 'sprout-base-sitemaps/sitemaps/edit/{id}/'.$currentSite->handle;
+        $continueEditingUrl = $pluginHandle.'/sitemaps/edit/{id}/'.$currentSite->handle;
 
         $tabs = [
             [
@@ -188,7 +189,8 @@ class SitemapsController extends Controller
             'currentSite' => $currentSite,
             'sitemapSection' => $sitemapSection,
             'continueEditingUrl' => $continueEditingUrl,
-            'tabs' => $tabs
+            'tabs' => $tabs,
+            'pluginHandle' => $pluginHandle
         ]);
     }
 
@@ -215,9 +217,9 @@ class SitemapsController extends Controller
         $sitemapSection->changeFrequency = Craft::$app->getRequest()->getBodyParam('changeFrequency');
         $sitemapSection->enabled = Craft::$app->getRequest()->getBodyParam('enabled');
 
-        $currentPluginHandle = Craft::$app->getRequest()->getBodyParam('currentPluginHandle');
+        $pluginHandle = Craft::$app->getRequest()->getBodyParam('pluginHandle');
 
-        if (!SproutBaseSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection, $currentPluginHandle)) {
+        if (!SproutBaseSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection, $pluginHandle)) {
             if (Craft::$app->request->getAcceptsJson()) {
                 return $this->asJson([
                     'errors' => $sitemapSection->getErrors(),

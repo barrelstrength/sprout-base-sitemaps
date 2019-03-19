@@ -19,7 +19,7 @@
             {% if enableMultilingualSitemaps and currentSite.id != firstSiteInGroup.id %}
                 <div class="buttons right">
                     <a class="btn submit icon"
-                       href="{{ url('sprout-base-sitemaps/sitemaps') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit {group} Sitemap"|t('sprout-base-sitemaps', {
+                       href="{{ url(pluginHandle ~ '/sitemaps') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit {group} Sitemap"|t('sprout-base-sitemaps', {
                             group: siteGroup.name
                         }) }}</a>
                 </div>
@@ -82,7 +82,7 @@
         {% set boxBody %}
             <p>{{ "Multi-lingual sitemaps have a single sitemap edit page for all URL-Enabled Sites in a Site Group. Edit the <a href='{url}'>{group} Sitemap</a> to manage the multi-lingual sitemap for all sites in the site group."|t('sprout-base-sitemaps', {
                     group: siteGroup.name,
-                    url: url('sprout-base-sitemaps/sitemaps') ~ '/' ~ firstSiteInGroup.handle
+                    url: url(pluginHandle ~ '/sitemaps') ~ '/' ~ firstSiteInGroup.handle
                 })|raw }}</p>
         {% endset %}
 
@@ -105,7 +105,7 @@
             <div style="flex-shrink: 0;">
                 <div class="buttons right">
                     <a class="btn submit add icon"
-                       href="{{ url('sprout-base-sitemaps/sitemaps/new/' ~ currentSite.handle) }}">{{ "Custom URL"|t }}</a>
+                       href="{{ url(pluginHandle ~ '/sitemaps/new/' ~ currentSite.handle) }}">{{ "Custom URL"|t }}</a>
                 </div>
             </div>
         </div>
@@ -127,7 +127,8 @@
                     <tr data-rowid="{{ customSectionId }}"
                         data-id="{{ customSection.id }}"
                         data-type="{{ customSection.type }}"
-                        data-name="{{ "Custom Page"|t('sprout-base-sitemaps') }}">
+                        data-name="{{ "Custom Page"|t('sprout-base-sitemaps') }}"
+                        data-current-plugin-handle="{{ craft.app.getRequest().getSegment(1) }}">
 
                         {% block customSectionTableRow %}{% endblock %}
 

@@ -152,12 +152,13 @@ class Sitemaps extends Component
 
     /**
      * @param SitemapSection $sitemapSection
+     * @param string         $pluginHandle
      *
      * @return bool
      * @throws Exception
      * @throws \Throwable
      */
-    public function saveSitemapSection(SitemapSection $sitemapSection, $currentPluginHandle): bool
+    public function saveSitemapSection(SitemapSection $sitemapSection, string $pluginHandle): bool
     {
         $isNewSection = !$sitemapSection->id;
 
@@ -210,9 +211,9 @@ class Sitemaps extends Component
 
         // update id on model (for new records)
         $sitemapSection->id = $sitemapSectionRecord->id;
-        
+
         /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin($currentPluginHandle);
+        $plugin = Craft::$app->plugins->getPlugin($pluginHandle);
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
 
