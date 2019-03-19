@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutbasesitemaps\web\assets\general;
 
 use craft\web\AssetBundle;
+use craft\web\assets\cp\CpAsset;
 
 class GeneralAsset extends AssetBundle
 {
@@ -17,6 +18,10 @@ class GeneralAsset extends AssetBundle
     public function init()
     {
         $this->sourcePath = '@sproutbasesitemaps/web/assets/general/dist';
+
+        $this->depends = [
+            CpAsset::class,
+        ];
 
         $this->js = [
             'js/general.js'
