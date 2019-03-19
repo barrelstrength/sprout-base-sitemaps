@@ -51,7 +51,7 @@ class XmlSitemapController extends Controller
 
         if (!$plugin) {
             /** @var Plugin $plugin */
-            $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         }
 
         /** @var Settings $pluginSettings */

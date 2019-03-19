@@ -265,7 +265,7 @@ class XmlSitemap extends Component
 
         if (!$plugin) {
             /** @var Plugin $plugin */
-            $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         }
         
         $pluginSettings = $plugin->getSettings();
@@ -455,7 +455,7 @@ class XmlSitemap extends Component
 
         if (!$plugin) {
             /** @var Plugin $plugin */
-            $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         }
 
         /** @var Settings $settings */
