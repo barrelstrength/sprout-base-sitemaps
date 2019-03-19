@@ -59,7 +59,7 @@
                         data-url-enabled-section-id="{{ sitemapSection.urlEnabledSectionId }}"
                         data-uri="{{ sitemapSection.uri }}"
                         data-is-new="{{ sitemapSection.isNew }}"
-                        data-current-plugin-handle="{{ craft.app.getRequest().getSegment(1) }}">
+                        data-plugin-handle="{{ craft.app.getRequest().getSegment(1) }}">
 
                         {% block sitemapSectionTableRow %}{% endblock %}
 
@@ -128,7 +128,7 @@
                         data-id="{{ customSection.id }}"
                         data-type="{{ customSection.type }}"
                         data-name="{{ "Custom Page"|t('sprout-base-sitemaps') }}"
-                        data-current-plugin-handle="{{ craft.app.getRequest().getSegment(1) }}">
+                        data-plugin-handle="{{ craft.app.getRequest().getSegment(1) }}">
 
                         {% block customSectionTableRow %}{% endblock %}
 
