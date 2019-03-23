@@ -28,9 +28,7 @@ class SitemapsController extends Controller
 
     public function init()
     {
-        $permissionNames = Settings::getSharedPermissions();
-        $pluginHandle = Craft::$app->request->getSegment(1);
-        $this->permissions = SproutBase::$app->settings->getSharedPermissions($permissionNames, 'sprout-sitemaps', $pluginHandle);
+        $this->permissions = SproutBase::$app->settings->getPluginPermissions(new Settings(), 'sprout-sitemaps');
 
         parent::init();
     }
