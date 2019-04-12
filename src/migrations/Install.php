@@ -10,7 +10,7 @@ namespace barrelstrength\sproutbasesitemaps\migrations;
 use Craft;
 
 use craft\db\Migration;
-use barrelstrength\sproutbasesitemaps\models\Settings;
+use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
 use craft\services\Plugins;
 
 class Install extends Migration
@@ -87,16 +87,65 @@ class Install extends Migration
      * @throws \yii\base\NotSupportedException
      * @throws \yii\web\ServerErrorHttpException
      */
-    protected function insertDefaultSettings()
+    public function insertDefaultSettings()
     {
-        $settings = new Settings();
-        // default site id for sections
-        $site = Craft::$app->getSites()->getPrimarySite();
-        $settings->siteSettings[$site->id] = $site->id;
+        $settings = $this->getSproutSitemapSettingsModel();
 
         // Add our default plugin settings
-        $pluginHandle = 'sprout-base-sitemaps';
+        $pluginHandle = 'sprout-sitemaps';
+        Craft::$app->getProjectConfig()->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
+
+        // Remove unused settings
+        Craft::$app->getProjectConfig()->remove(Plugins::CONFIG_PLUGINS_KEY.'.sprout-base-sitemaps');
+    }
+
+    /**
+     * @return SproutSitemapSettings
+     * @throws \craft\errors\SiteNotFoundException
+     */
+    private function getSproutSitemapSettingsModel(): SproutSitemapSettings
+    {
         $projectConfig = Craft::$app->getProjectConfig();
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
+        $settings = new SproutSitemapSettings();
+
+        $sproutSitemapsSettings = $projectConfig->get('plugins.sprout-sitemaps.settings');
+
+        // If we already have settings and a structureId defined for Sprout Redirects
+        if ($sproutSitemapsSettings &&
+            isset($sproutSitemapsSettings['siteSettings']) &&
+            !empty($sproutSitemapsSettings['siteSettings'])) {
+
+            $settings->siteSettings = $sproutSitemapsSettings['siteSettings'];
+            return $settings;
+        }
+
+        // Need to fix how settings were stored in an earlier install
+        // @deprecate in future version
+        $sproutBaseSitemapSettings = $projectConfig->get('plugins.sprout-base-sitemaps.settings');
+
+        if ($sproutBaseSitemapSettings &&
+            isset($sproutBaseSitemapSettings['siteSettings']) &&
+            !empty($sproutBaseSitemapSettings['siteSettings'])) {
+
+            $settings->siteSettings = $sproutBaseSitemapSettings['siteSettings'];
+            return $settings;
+        }
+
+        // Need to check for how we stored data in Sprout SEO schema and migrate things if we find them
+        // @deprecate in future version
+        $sproutSeoSettings = $projectConfig->get('plugins.sprout-seo.settings');
+
+        if ($sproutSeoSettings &&
+            isset($sproutSeoSettings['siteSettings']) &&
+            !empty($sproutSeoSettings['siteSettings'])) {
+
+            $settings->siteSettings = $sproutSeoSettings['siteSettings'];
+            return $settings;
+        }
+
+        // If none of the above have an existing siteSettings, create a new one
+        $site = Craft::$app->getSites()->getPrimarySite();
+        $settings->siteSettings[$site->id] = $site->id;
+        return $settings;
     }
 }
