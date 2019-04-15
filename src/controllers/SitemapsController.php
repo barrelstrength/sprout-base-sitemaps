@@ -47,11 +47,9 @@ class SitemapsController extends Controller
     public function actionSitemapIndexTemplate(string $pluginHandle, string $siteHandle = null): Response
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
-        
-        /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin($pluginHandle);
+
         /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
         $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $settings->enableMultilingualSitemaps;
 
         // Get Enabled Site IDs. Remove any disabled IDS.

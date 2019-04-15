@@ -46,18 +46,9 @@ class XmlSitemapController extends Controller
         $multiSiteSiteIds = [];
         $sitesInGroup = [];
 
-        /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
 
-        if (!$plugin) {
-            /** @var Plugin $plugin */
-            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        }
-
-        /** @var Settings $pluginSettings */
-        $pluginSettings = $plugin->getSettings();
-
-        $isMultilingualSitemap = $pluginSettings->enableMultilingualSitemaps;
+        $isMultilingualSitemap = $settings->enableMultilingualSitemaps;
 
         if (Craft::$app->getIsMultiSite() && $isMultilingualSitemap) {
             $sitesInGroup = SproutBaseSitemaps::$app->xmlSitemap->getCurrentSitemapSites();

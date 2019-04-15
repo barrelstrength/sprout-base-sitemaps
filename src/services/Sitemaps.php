@@ -212,10 +212,7 @@ class Sitemaps extends Component
         // update id on model (for new records)
         $sitemapSection->id = $sitemapSectionRecord->id;
 
-        /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin($pluginHandle);
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
 
         // Copy this site behavior to the whole group, for the Url-Enabled Sitemaps
         // Custom Sections will be allowed to be unique, even in Multi-Lingual Sitemaps
@@ -443,5 +440,22 @@ class Sitemaps extends Component
         }
 
         return [];
+    }
+
+    /**
+     * @return Settings
+     */
+    public function getSitemapsSettings(): Settings
+    {
+        $projectConfig = Craft::$app->getProjectConfig();
+        $sproutSitemapsSettings = $projectConfig->get('plugins.sprout-sitemaps.settings');
+
+        $settings = new Settings();
+
+        if ($sproutSitemapsSettings){
+            $settings->setAttributes($sproutSitemapsSettings, false);
+        }
+
+        return $settings;
     }
 }
