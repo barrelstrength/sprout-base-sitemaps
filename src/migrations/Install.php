@@ -115,6 +115,11 @@ class Install extends Migration
             isset($sproutSitemapsSettings['siteSettings']) &&
             !empty($sproutSitemapsSettings['siteSettings'])) {
 
+            $settings->pluginNameOverride = $sproutSitemapsSettings['pluginNameOverride'];
+            $settings->enableCustomSections = $sproutSitemapsSettings['enableCustomSections'];
+            $settings->enableDynamicSitemaps = $sproutSitemapsSettings['enableDynamicSitemaps'];
+            $settings->enableMultilingualSitemaps = $sproutSitemapsSettings['enableMultilingualSitemaps'];
+            $settings->totalElementsPerSitemap = $sproutSitemapsSettings['totalElementsPerSitemap'];
             $settings->siteSettings = $sproutSitemapsSettings['siteSettings'];
             return $settings;
         }
@@ -127,6 +132,11 @@ class Install extends Migration
             isset($sproutBaseSitemapSettings['siteSettings']) &&
             !empty($sproutBaseSitemapSettings['siteSettings'])) {
 
+            $settings->pluginNameOverride = $sproutBaseSitemapSettings['pluginNameOverride'];
+            $settings->enableCustomSections = $sproutBaseSitemapSettings['enableCustomSections'];
+            $settings->enableDynamicSitemaps = $sproutBaseSitemapSettings['enableDynamicSitemaps'];
+            $settings->enableMultilingualSitemaps = $sproutBaseSitemapSettings['enableMultilingualSitemaps'];
+            $settings->totalElementsPerSitemap = $sproutBaseSitemapSettings['totalElementsPerSitemap'];
             $settings->siteSettings = $sproutBaseSitemapSettings['siteSettings'];
             return $settings;
         }
@@ -139,6 +149,11 @@ class Install extends Migration
             isset($sproutSeoSettings['siteSettings']) &&
             !empty($sproutSeoSettings['siteSettings'])) {
 
+            $settings->pluginNameOverride = $sproutSeoSettings['pluginNameOverride'];
+            $settings->enableCustomSections = $sproutSeoSettings['enableCustomSections'];
+            $settings->enableDynamicSitemaps = $sproutSeoSettings['enableDynamicSitemaps'];
+            $settings->enableMultilingualSitemaps = $sproutSeoSettings['enableMultilingualSitemaps'];
+            $settings->totalElementsPerSitemap = $sproutSeoSettings['totalElementsPerSitemap'];
             $settings->siteSettings = $sproutSeoSettings['siteSettings'];
             return $settings;
         }
