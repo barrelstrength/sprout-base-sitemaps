@@ -1,5 +1,7 @@
 {% import "_includes/forms" as forms %}
 
+<input type="hidden" name="mainPlugindHandle" value="{{ settings.getMainPluginHandle() }}">
+
 {{ forms.lightswitchField({
     label: "Enable Dynamic Sitemaps"|t,
     instructions: "Output a dynamic XML sitemap of all pages in your URL-Enabled Sections."|t('sprout-base-sitemaps'),

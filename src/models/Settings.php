@@ -90,4 +90,12 @@ class Settings extends Model implements SharedPermissionsInterface
             'editSitemaps'
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getMainPluginHandle(): string
+    {
+        return 'sprout-sitemaps';
+    }
 }
