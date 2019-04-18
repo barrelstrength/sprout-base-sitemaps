@@ -1,6 +1,7 @@
 {% import "_includes/forms" as forms %}
 
-<input type="hidden" name="mainPlugindHandle" value="{{ settings.getMainPluginHandle() }}">
+<input type="hidden" name="projectConfigHandle" value="{{ settings.getProjectConfigHandle() }}">
+<input type="hidden" name="projectConfigSettingsType" value="{{ className(settings) }}">
 
 {{ forms.lightswitchField({
     label: "Enable Dynamic Sitemaps"|t,
@@ -8,7 +9,8 @@
     name: 'enableDynamicSitemaps',
     toggle: 'settings-total-elements',
     on: settings.enableDynamicSitemaps,
-    onLabel: "Enable"|t
+    onLabel: "Enable"|t,
+    first: true
 }) }}
 
 {{ forms.textField({

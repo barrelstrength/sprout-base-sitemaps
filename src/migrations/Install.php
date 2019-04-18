@@ -15,6 +15,7 @@ use craft\services\Plugins;
 
 class Install extends Migration
 {
+    const PROJECT_CONFIG_HANDLE = 'sprout-base-sitemaps';
     /**
      * @var string The database driver to use
      */
@@ -92,11 +93,8 @@ class Install extends Migration
         $settings = $this->getSproutSitemapSettingsModel();
 
         // Add our default plugin settings
-        $pluginHandle = 'sprout-sitemaps';
+        $pluginHandle = self::PROJECT_CONFIG_HANDLE;
         Craft::$app->getProjectConfig()->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
-
-        // Remove unused settings
-        Craft::$app->getProjectConfig()->remove(Plugins::CONFIG_PLUGINS_KEY.'.sprout-base-sitemaps');
     }
 
     /**
@@ -107,26 +105,11 @@ class Install extends Migration
     {
         $projectConfig = Craft::$app->getProjectConfig();
         $settings = new SproutSitemapSettings();
-
-        $sproutSitemapsSettings = $projectConfig->get('plugins.sprout-sitemaps.settings');
-
-        // If we already have settings and a structureId defined for Sprout Redirects
-        if ($sproutSitemapsSettings &&
-            isset($sproutSitemapsSettings['siteSettings']) &&
-            !empty($sproutSitemapsSettings['siteSettings'])) {
-
-            $settings->pluginNameOverride = $sproutSitemapsSettings['pluginNameOverride'];
-            $settings->enableCustomSections = $sproutSitemapsSettings['enableCustomSections'];
-            $settings->enableDynamicSitemaps = $sproutSitemapsSettings['enableDynamicSitemaps'];
-            $settings->enableMultilingualSitemaps = $sproutSitemapsSettings['enableMultilingualSitemaps'];
-            $settings->totalElementsPerSitemap = $sproutSitemapsSettings['totalElementsPerSitemap'];
-            $settings->siteSettings = $sproutSitemapsSettings['siteSettings'];
-            return $settings;
-        }
+        $pluginHandle = self::PROJECT_CONFIG_HANDLE;
 
         // Need to fix how settings were stored in an earlier install
         // @deprecate in future version
-        $sproutBaseSitemapSettings = $projectConfig->get('plugins.sprout-base-sitemaps.settings');
+        $sproutBaseSitemapSettings = $projectConfig->get('plugins.'.$pluginHandle.'.settings');
 
         if ($sproutBaseSitemapSettings &&
             isset($sproutBaseSitemapSettings['siteSettings']) &&

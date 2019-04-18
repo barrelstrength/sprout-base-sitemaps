@@ -94,8 +94,8 @@ class Settings extends Model implements SharedPermissionsInterface
     /**
      * @return string
      */
-    public function getMainPluginHandle(): string
+    public function getProjectConfigHandle(): string
     {
-        return 'sprout-sitemaps';
+        return 'sprout-base-sitemaps';
     }
 }
