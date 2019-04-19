@@ -67,7 +67,8 @@
         required: true,
         name: 'uri',
         value: (sitemapSection.uri == '__home__') ? "/" : sitemapSection.uri,
-        errors: sitemapSection.getErrors('uri')
+        errors: sitemapSection.getErrors('uri'),
+        first: true
     }) }}
 
     {% set priorityList = {
