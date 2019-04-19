@@ -157,7 +157,7 @@ class Install extends Migration
     {
         $query = (new Query())
             ->select(['settings'])
-            ->from(['{{%sproutbase_settings}}'])
+            ->from(['{{%sprout_settings}}'])
             ->where(['model' => SproutSitemapSettings::class])
             ->one();
 
@@ -166,7 +166,7 @@ class Install extends Migration
                 'model' => SproutSitemapSettings::class
             ];
 
-            $this->insert('{{%sproutbase_settings}}', $settings);
+            $this->insert('{{%sprout_settings}}', $settings);
         }
     }
 }
