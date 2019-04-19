@@ -62,13 +62,13 @@ class Settings extends Model implements SharedPermissionsInterface
         return [
             'general' => [
                 'label' => Craft::t('sprout-base-sitemaps', 'General'),
-                'url' => 'sprout-base-sitemaps/settings/general',
+                'url' => 'sprout-sitemaps/settings/general',
                 'selected' => 'general',
                 'template' => 'sprout-base-sitemaps/settings/general'
             ],
             'sitemaps' => [
                 'label' => Craft::t('sprout-base-sitemaps', 'Sitemaps'),
-                'url' => 'sprout-base-sitemaps/settings/sitemaps',
+                'url' => 'sprout-sitemaps/settings/sitemaps',
                 'selected' => 'sitemaps',
                 'template' => 'sprout-base-sitemaps/settings/sitemaps'
             ]
