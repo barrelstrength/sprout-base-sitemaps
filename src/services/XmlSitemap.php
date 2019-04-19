@@ -260,15 +260,7 @@ class XmlSitemap extends Component
      */
     public function getCurrentSitemapSites(): array
     {
-        /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
-
-        if (!$plugin) {
-            /** @var Plugin $plugin */
-            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        }
-
-        $pluginSettings = $plugin->getSettings();
+        $pluginSettings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
 
         $currentSite = Craft::$app->sites->getCurrentSite();
         $isMultisite = Craft::$app->getIsMultiSite();
