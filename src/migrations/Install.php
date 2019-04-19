@@ -7,13 +7,11 @@
 
 namespace barrelstrength\sproutbasesitemaps\migrations;
 
-use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use Craft;
-
 use craft\db\Migration;
 use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
+use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use craft\db\Query;
-use craft\services\Plugins;
+use Craft;
 
 /**
  *
@@ -21,7 +19,6 @@ use craft\services\Plugins;
  */
 class Install extends Migration
 {
-    const PROJECT_CONFIG_HANDLE = 'sprout-base-sitemaps';
     /**
      * @var string The database driver to use
      */
@@ -54,6 +51,11 @@ class Install extends Migration
 
     protected function createTables()
     {
+        $migration = new SproutBaseInstall();
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+
         $table = '{{%sproutseo_sitemaps}}';
 
         if (!$this->db->tableExists($table)) {
@@ -96,77 +98,25 @@ class Install extends Migration
      */
     public function insertDefaultSettings()
     {
-        $this->insertDefaultSettingsRow();
-        $settings = $this->getSproutSitemapSettingsModel();
-
-        // Add our default plugin settings
-        SproutBaseSitemaps::$app->sitemaps->saveSitemapsSettings($settings->toArray());
-    }
-
-    /**
-     * @return SproutSitemapSettings
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    private function getSproutSitemapSettingsModel(): SproutSitemapSettings
-    {
-        $projectConfig = Craft::$app->getProjectConfig();
-        $settings = new SproutSitemapSettings();
-        $pluginHandle = self::PROJECT_CONFIG_HANDLE;
-
-        // Need to fix how settings were stored in an earlier install
-        // @deprecate in future version
-        $sproutBaseSitemapSettings = $projectConfig->get('plugins.'.$pluginHandle.'.settings');
-
-        if ($sproutBaseSitemapSettings &&
-            isset($sproutBaseSitemapSettings['siteSettings']) &&
-            !empty($sproutBaseSitemapSettings['siteSettings'])) {
-
-            $settings->pluginNameOverride = $sproutBaseSitemapSettings['pluginNameOverride'];
-            $settings->enableCustomSections = $sproutBaseSitemapSettings['enableCustomSections'];
-            $settings->enableDynamicSitemaps = $sproutBaseSitemapSettings['enableDynamicSitemaps'];
-            $settings->enableMultilingualSitemaps = $sproutBaseSitemapSettings['enableMultilingualSitemaps'];
-            $settings->totalElementsPerSitemap = $sproutBaseSitemapSettings['totalElementsPerSitemap'];
-            $settings->siteSettings = $sproutBaseSitemapSettings['siteSettings'];
-            return $settings;
-        }
-
-        // Need to check for how we stored data in Sprout SEO schema and migrate things if we find them
-        // @deprecate in future version
-        $sproutSeoSettings = $projectConfig->get('plugins.sprout-seo.settings');
-
-        if ($sproutSeoSettings &&
-            isset($sproutSeoSettings['siteSettings']) &&
-            !empty($sproutSeoSettings['siteSettings'])) {
-
-            $settings->pluginNameOverride = $sproutSeoSettings['pluginNameOverride'];
-            $settings->enableCustomSections = $sproutSeoSettings['enableCustomSections'];
-            $settings->enableDynamicSitemaps = $sproutSeoSettings['enableDynamicSitemaps'];
-            $settings->enableMultilingualSitemaps = $sproutSeoSettings['enableMultilingualSitemaps'];
-            $settings->totalElementsPerSitemap = $sproutSeoSettings['totalElementsPerSitemap'];
-            $settings->siteSettings = $sproutSeoSettings['siteSettings'];
-            return $settings;
-        }
-
-        // If none of the above have an existing siteSettings, create a new one
-        $site = Craft::$app->getSites()->getPrimarySite();
-        $settings->siteSettings[$site->id] = $site->id;
-        return $settings;
-    }
-
-    private function insertDefaultSettingsRow()
-    {
-        $query = (new Query())
-            ->select(['settings'])
+        $settingsRow = (new Query())
+            ->select(['*'])
             ->from(['{{%sprout_settings}}'])
             ->where(['model' => SproutSitemapSettings::class])
             ->one();
 
-        if (is_null($query)){
-            $settings = [
-                'model' => SproutSitemapSettings::class
+        if (is_null($settingsRow)){
+
+            $settings = new SproutSitemapSettings();
+
+            $site = Craft::$app->getSites()->getPrimarySite();
+            $settings->siteSettings[$site->id] = $site->id;
+
+            $settingsArray = [
+                'model' => SproutSitemapSettings::class,
+                'settings' => json_encode($settings->toArray())
             ];
 
-            $this->insert('{{%sprout_settings}}', $settings);
+            $this->insert('{{%sprout_settings}}', $settingsArray);
         }
     }
 }
