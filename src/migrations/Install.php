@@ -7,10 +7,12 @@
 
 namespace barrelstrength\sproutbasesitemaps\migrations;
 
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use Craft;
 
 use craft\db\Migration;
 use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
+use craft\db\Query;
 use craft\services\Plugins;
 
 class Install extends Migration
@@ -90,11 +92,11 @@ class Install extends Migration
      */
     public function insertDefaultSettings()
     {
+        $this->insertDefaultSettingsRow();
         $settings = $this->getSproutSitemapSettingsModel();
 
         // Add our default plugin settings
-        $pluginHandle = self::PROJECT_CONFIG_HANDLE;
-        Craft::$app->getProjectConfig()->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
+        SproutBaseSitemaps::$app->sitemaps->saveSitemapsSettings($settings->toArray());
     }
 
     /**
@@ -145,5 +147,22 @@ class Install extends Migration
         $site = Craft::$app->getSites()->getPrimarySite();
         $settings->siteSettings[$site->id] = $site->id;
         return $settings;
+    }
+
+    private function insertDefaultSettingsRow()
+    {
+        $query = (new Query())
+            ->select(['settings'])
+            ->from(['{{%sproutbase_settings}}'])
+            ->where(['model' => SproutSitemapSettings::class])
+            ->one();
+
+        if (is_null($query)){
+            $settings = [
+                'model' => SproutSitemapSettings::class
+            ];
+
+            $this->insert('{{%sproutbase_settings}}', $settings);
+        }
     }
 }

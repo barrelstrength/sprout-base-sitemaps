@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutbasesitemaps\services;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\SproutBaseUris;
 use barrelstrength\sproutbaseuris\base\UrlEnabledSectionType;
@@ -15,6 +16,7 @@ use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\models\Settings;
 use craft\base\Element;
+use craft\base\Model;
 use craft\base\Plugin;
 use craft\errors\SiteNotFoundException;
 use yii\base\Component;
@@ -443,19 +445,24 @@ class Sitemaps extends Component
     }
 
     /**
-     * @return Settings
+     * @return Model
      */
-    public function getSitemapsSettings(): Settings
+    public function getSitemapsSettings(): Model
     {
-        $projectConfig = Craft::$app->getProjectConfig();
-        $sproutSitemapsSettings = $projectConfig->get('plugins.sprout-sitemaps.settings');
-
-        $settings = new Settings();
-
-        if ($sproutSitemapsSettings){
-            $settings->setAttributes($sproutSitemapsSettings, false);
-        }
+        $settings = SproutBase::$app->settings->getBaseSettings(Settings::class);
 
         return $settings;
+    }
+
+    /**
+     * @param array $settingsArray
+     * @return int
+     * @throws \yii\db\Exception
+     */
+    public function saveSitemapsSettings(array $settingsArray)
+    {
+        $result = SproutBase::$app->settings->saveBaseSettings($settingsArray,Settings::class);
+
+        return $result;
     }
 }
