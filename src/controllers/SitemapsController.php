@@ -12,7 +12,6 @@ use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\models\Settings;
-use craft\base\Plugin;
 use craft\web\Controller;
 use Craft;
 use yii\web\NotFoundHttpException;
@@ -213,9 +212,7 @@ class SitemapsController extends Controller
         $sitemapSection->changeFrequency = Craft::$app->getRequest()->getBodyParam('changeFrequency');
         $sitemapSection->enabled = Craft::$app->getRequest()->getBodyParam('enabled');
 
-        $pluginHandle = Craft::$app->getRequest()->getBodyParam('pluginHandle');
-
-        if (!SproutBaseSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection, $pluginHandle)) {
+        if (!SproutBaseSitemaps::$app->sitemaps->saveSitemapSection($sitemapSection)) {
             if (Craft::$app->request->getAcceptsJson()) {
                 return $this->asJson([
                     'errors' => $sitemapSection->getErrors(),

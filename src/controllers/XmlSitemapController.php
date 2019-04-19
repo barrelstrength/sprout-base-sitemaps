@@ -8,9 +8,7 @@
 namespace barrelstrength\sproutbasesitemaps\controllers;
 
 
-use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use craft\base\Plugin;
 use craft\web\Controller;
 
 use Craft;

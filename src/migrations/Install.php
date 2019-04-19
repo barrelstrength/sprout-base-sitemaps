@@ -15,6 +15,10 @@ use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
 use craft\db\Query;
 use craft\services\Plugins;
 
+/**
+ *
+ * @property \barrelstrength\sproutbasesitemaps\models\Settings $sproutSitemapSettingsModel
+ */
 class Install extends Migration
 {
     const PROJECT_CONFIG_HANDLE = 'sprout-base-sitemaps';

@@ -58,7 +58,7 @@
 
 {% block content %}
 
-    <input type="hidden" name="pluginHandle" value="{{ craft.app.getRequest().getSegment(1) }}" />
+    <input type="hidden" name="pluginHandle" value="{{ craft.app.getRequest().getSegment(1) }}"/>
 
     {{ forms.textField({
         label: "URI"|t('sprout-base-sitemaps'),

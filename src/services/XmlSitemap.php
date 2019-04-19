@@ -267,7 +267,7 @@ class XmlSitemap extends Component
             /** @var Plugin $plugin */
             $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         }
-        
+
         $pluginSettings = $plugin->getSettings();
 
         $currentSite = Craft::$app->sites->getCurrentSite();

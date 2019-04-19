@@ -17,7 +17,6 @@ use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\models\Settings;
 use craft\base\Element;
 use craft\base\Model;
-use craft\base\Plugin;
 use craft\errors\SiteNotFoundException;
 use yii\base\Component;
 use craft\db\Query;
@@ -28,7 +27,8 @@ use yii\web\NotFoundHttpException;
 
 /**
  *
- * @property array $transforms
+ * @property \barrelstrength\sproutbasesitemaps\models\Settings $sitemapsSettings
+ * @property array                                              $transforms
  */
 class Sitemaps extends Component
 {
@@ -154,13 +154,12 @@ class Sitemaps extends Component
 
     /**
      * @param SitemapSection $sitemapSection
-     * @param string         $pluginHandle
      *
      * @return bool
      * @throws Exception
      * @throws \Throwable
      */
-    public function saveSitemapSection(SitemapSection $sitemapSection, string $pluginHandle): bool
+    public function saveSitemapSection(SitemapSection $sitemapSection): bool
     {
         $isNewSection = !$sitemapSection->id;
 

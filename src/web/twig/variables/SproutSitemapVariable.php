@@ -7,10 +7,8 @@
 
 namespace barrelstrength\sproutbasesitemaps\web\twig\variables;
 
-use barrelstrength\sproutsitemaps\SproutSitemaps;
 use Craft;
 
-use craft\base\Plugin;
 use DateTime;
 
 /**
