@@ -165,9 +165,7 @@ class Sitemaps extends Component
 
         if (!$isNewSection) {
             if (null === ($sitemapSectionRecord = SitemapSectionRecord::findOne($sitemapSection->id))) {
-                throw new Exception(Craft::t('sprout-base-sitemaps', 'Unable to find Sitemap with ID "{id}"', [
-                    'id' => $sitemapSection->id
-                ]));
+                throw new Exception('Unable to find Sitemap with ID: ' . $sitemapSection->id);
             }
         } else {
             $sitemapSectionRecord = new SitemapSectionRecord();
@@ -221,9 +219,7 @@ class Sitemaps extends Component
             $site = Craft::$app->getSites()->getSiteById($sitemapSectionRecord->siteId);
 
             if (!$site) {
-                throw new NotFoundHttpException(Craft::t('sprout-base-sitemaps', 'Unable to find Site with id: {id}', [
-                    'id' => $sitemapSectionRecord->siteId
-                ]));
+                throw new NotFoundHttpException('Unable to find Site with ID: '.$sitemapSectionRecord->siteId);
             }
 
             $sitesInGroup = Craft::$app->getSites()->getSitesByGroupId($site->groupId);
