@@ -50,10 +50,10 @@ class XmlSitemapController extends Controller
 
         if (Craft::$app->getIsMultiSite() && $isMultilingualSitemap) {
             $sitesInGroup = SproutBaseSitemaps::$app->xmlSitemap->getCurrentSitemapSites();
-            $firstSiteInGroup = $sitesInGroup[0];
+            $firstSiteInGroup = $sitesInGroup[0] ?? null;
 
             // Only render sitemaps for the primary site in a group
-            if ($siteId !== $firstSiteInGroup->id) {
+            if ($firstSiteInGroup == null || $siteId !== $firstSiteInGroup->id) {
                 throw new HttpException(404);
             }
 
