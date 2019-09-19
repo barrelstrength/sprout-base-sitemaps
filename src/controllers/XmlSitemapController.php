@@ -53,7 +53,7 @@ class XmlSitemapController extends Controller
             $firstSiteInGroup = $sitesInGroup[0] ?? null;
 
             // Only render sitemaps for the primary site in a group
-            if ($firstSiteInGroup == null || $siteId !== $firstSiteInGroup->id) {
+            if ($firstSiteInGroup === null || $siteId !== $firstSiteInGroup->id) {
                 throw new HttpException(404);
             }
 
