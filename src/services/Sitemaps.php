@@ -195,7 +195,7 @@ class Sitemaps extends Component
         $sitemapSectionRecord->uri = $sitemapSection->uri;
         $sitemapSectionRecord->priority = $sitemapSection->priority;
         $sitemapSectionRecord->changeFrequency = $sitemapSection->changeFrequency;
-        $sitemapSectionRecord->enabled = $sitemapSection->enabled ?? false;
+        $sitemapSectionRecord->enabled = $sitemapSection->enabled ?? 0;
 
         $transaction = Craft::$app->db->beginTransaction();
 
