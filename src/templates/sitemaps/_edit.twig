@@ -16,17 +16,12 @@
 {% set saveShortcutRedirect = continueEditingUrl %}
 
 {% block actionButton %}
-    <input type="hidden" name="action"
-           value="sprout-base-sitemaps/sitemaps/save-sitemap-section">
+    <input type="hidden" name="action" value="sprout-base-sitemaps/sitemaps/save-sitemap-section">
     {{ redirectInput(pluginHandle ~ '/sitemaps/' ~ currentSite.handle) }}
-    <input type="hidden" id="sectionId" name="id"
-           value="{{ sitemapSection.id is defined ? sitemapSection.id : '' }}">
-    <input type="hidden" name="urlEnabledSectionId"
-           value="{{ sitemapSection.urlEnabledSectionId ?? '' }}">
-    <input type="hidden" name="type"
-           value="{{ sitemapSection.type ?? '' }}">
-    <input type="hidden" name="siteId"
-           value="{{ sitemapSection.siteId ?? null }}">
+    <input type="hidden" id="sectionId" name="id" value="{{ sitemapSection.id is defined ? sitemapSection.id : '' }}">
+    <input type="hidden" name="urlEnabledSectionId" value="{{ sitemapSection.urlEnabledSectionId ?? '' }}">
+    <input type="hidden" name="type" value="{{ sitemapSection.type ?? '' }}">
+    <input type="hidden" name="siteId" value="{{ sitemapSection.siteId ?? null }}">
 
     <div class="btngroup submit first">
         <input type="submit" class="btn submit"
@@ -58,7 +53,6 @@
 {% endblock %}
 
 {% block content %}
-
     <input type="hidden" name="pluginHandle" value="{{ craft.app.getRequest().getSegment(1) }}"/>
 
     {{ forms.textField({
@@ -144,21 +138,3 @@
 {% endblock %}
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbasesitemaps\\web\\assets\\sitemaps\\SitemapsAsset") %}
-
-{% if sitemapSection.name is not defined or not sitemapSection.handle %}
-    {% js %}
-        new Craft.HandleGenerator('#name', '#handle');
-    {% endjs %}
-{% endif %}
-
-{% js %}
-
-    $('#sproutseo-optimizedkeywords-field input').tagEditor({
-    animateDelete: 20
-    });
-
-    new Craft.SproutSeoMetaTags();
-
-{% endjs %}
-
-

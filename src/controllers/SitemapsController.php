@@ -12,8 +12,12 @@ use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\models\Settings;
+use craft\errors\SiteNotFoundException;
 use craft\web\Controller;
 use Craft;
+use Throwable;
+use yii\db\Exception;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
@@ -41,7 +45,7 @@ class SitemapsController extends Controller
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function actionSitemapIndexTemplate(string $pluginHandle, string $siteHandle = null): Response
     {
@@ -193,9 +197,9 @@ class SitemapsController extends Controller
      * Saves a Sitemap Section
      *
      * @return null|Response
-     * @throws \Throwable
-     * @throws \yii\db\Exception
-     * @throws \yii\web\BadRequestHttpException
+     * @throws Throwable
+     * @throws Exception
+     * @throws BadRequestHttpException
      */
     public function actionSaveSitemapSection()
     {
@@ -244,8 +248,8 @@ class SitemapsController extends Controller
      *
      * @return Response
      * @throws ForbiddenHttpException
-     * @throws \yii\db\Exception
-     * @throws \yii\web\BadRequestHttpException
+     * @throws Exception
+     * @throws BadRequestHttpException
      */
     public function actionDeleteSitemapById(): Response
     {

@@ -9,6 +9,7 @@ namespace barrelstrength\sproutbasesitemaps\web\assets\sitemaps;
 
 use barrelstrength\sproutbasesitemaps\web\assets\base\BaseAsset;
 use craft\web\AssetBundle;
+use craft\web\assets\cp\CpAsset;
 
 class SitemapsAsset extends AssetBundle
 {
@@ -20,13 +21,15 @@ class SitemapsAsset extends AssetBundle
         $this->sourcePath = '@sproutbasesitemaps/web/assets/sitemaps/dist';
 
         $this->depends = [
-            BaseAsset::class
+            CpAsset::class,
         ];
 
-        // @todo - update this file to be named better
+        $this->css = [
+            'css/sitemaps.css'
+        ];
+
         $this->js = [
-            'js/sitemaps.js',
-            'js/MetaTags.js'
+            'js/sitemaps.js'
         ];
 
         parent::init();
