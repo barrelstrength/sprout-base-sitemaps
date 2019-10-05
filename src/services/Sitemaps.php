@@ -232,8 +232,8 @@ class Sitemaps extends Component
             // all sections saved for this site
             $sitemapSectionRecords = SitemapSectionRecord::find()
                 ->where(['in', 'siteId', $siteIds])
-                ->andWhere('urlEnabledSectionId= :urlEnabledSectionId', [
-                    ':urlEnabledSectionId' => $sitemapSectionRecord->urlEnabledSectionId
+                ->andWhere([
+                    'urlEnabledSectionId' => $sitemapSectionRecord->urlEnabledSectionId
                 ])
                 ->indexBy('siteId')
                 ->all();
