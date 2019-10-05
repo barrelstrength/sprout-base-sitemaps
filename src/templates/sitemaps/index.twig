@@ -186,5 +186,7 @@
 {% endblock %}
 
 {% js %}
-    new Craft.SproutSeo.Sitemap();
+    (function() {
+    new SproutSeoSitemapIndex();
+    })();
 {% endjs %}
