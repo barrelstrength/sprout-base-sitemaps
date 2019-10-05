@@ -9,10 +9,13 @@ namespace barrelstrength\sproutbasesitemaps\controllers;
 
 
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
+use craft\errors\SiteNotFoundException;
 use craft\web\Controller;
 
 use Craft;
+use Exception;
 use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 
@@ -32,11 +35,11 @@ class XmlSitemapController extends Controller
      * @param null     $sitemapKey
      * @param int|null $pageNumber
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws HttpException
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      * @throws \yii\base\Exception
-     * @throws \Exception
+     * @throws Exception
      */
     public function actionRenderXmlSitemap($sitemapKey = null, int $pageNumber = null): Response
     {
@@ -45,6 +48,10 @@ class XmlSitemapController extends Controller
         $sitesInGroup = [];
 
         $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+
+        if (!$settings->enableDynamicSitemaps) {
+            throw new NotFoundHttpException('XML Sitemap not enabled.');
+        }
 
         $isMultilingualSitemap = $settings->enableMultilingualSitemaps;
 
