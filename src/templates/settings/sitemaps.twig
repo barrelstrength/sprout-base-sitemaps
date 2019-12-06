@@ -61,6 +61,10 @@
         {% set siteGroupRows = siteGroupRows|merge({
             (group.name): {
                 heading: group.name|t('site'),
+                sitemapBaseUrl: include('_includes/forms/text', {
+                    name: 'groupBaseUrl['~group.id~']',
+                    value: ''
+                }),
                 enabled: include('_includes/forms/lightswitch', {
                     name: 'groupSettings['~group.id~']',
                     on: groupSettings,
@@ -104,6 +108,10 @@
                 heading: {
                     type: 'heading',
                     heading: "Group"|t('sprout-base-sitemaps'),
+                },
+                sitemapBaseUrl: {
+                    type: 'heading',
+                    heading: "Base URL"|t('sprout-base-sitemaps'),
                 },
                 enabled: {
                     type: 'heading',
