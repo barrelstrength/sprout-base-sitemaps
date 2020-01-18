@@ -159,16 +159,3 @@
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 {% do view.registerAssetBundle("barrelstrength\\sproutbasesitemaps\\web\\assets\\sitemaps\\SitemapsAsset") %}
-
-{% js %}
-    new Craft.AdminTable({
-    tableSelector: '#custom-pages',
-    deleteAction: 'sprout-base-sitemaps/sitemaps/delete-sitemap-by-id',
-    onDeleteObject: function(id) {
-    if($('#custom-pages').find('tbody').find('tr').size() == 0)
-    {
-    $('#custom-pages').hide();
-    }
-    }
-    });
-{% endjs %}

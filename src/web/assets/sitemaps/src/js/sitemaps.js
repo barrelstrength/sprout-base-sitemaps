@@ -9,17 +9,22 @@ class SproutSeoSitemapIndex {
     const lightswitches = document.querySelectorAll('.sitemap-settings .lightswitch');
     const selectDropdowns = document.querySelectorAll('.sitemap-settings select');
     const customSectionUrls = document.querySelectorAll('.sitemap-settings input.sitemap-custom-url');
+    const customPageDeleteLinks = document.querySelectorAll('#custom-pages tbody tr td a.delete');
 
     for (const lightswitch of lightswitches) {
-      lightswitch.addEventListener('click', this.updateSitemap)
+      lightswitch.addEventListener('click', this.updateSitemap);
     }
 
     for (const selectDropdown of selectDropdowns) {
-      selectDropdown.addEventListener('change', this.updateSitemap)
+      selectDropdown.addEventListener('change', this.updateSitemap);
     }
 
     for (const customSectionUrl of customSectionUrls) {
-      customSectionUrl.addEventListener('change', this.updateSitemap)
+      customSectionUrl.addEventListener('change', this.updateSitemap);
+    }
+
+    for (const customPageDeleteLink of customPageDeleteLinks) {
+      customPageDeleteLink.addEventListener('click', this.deleteCustomPage);
     }
   }
 
@@ -94,6 +99,30 @@ class SproutSeoSitemapIndex {
       status.removeClass('live');
       status.addClass('disabled');
     }
+  }
+
+  deleteCustomPage(event) {
+    console.log();
+    let linkElement = event.target;
+    let row = linkElement.parentElement.parentElement;
+    let customPageId = row.getAttribute('data-id');
+
+    let data = {
+      id: customPageId
+    };
+
+    Craft.postActionRequest('sprout-base-sitemaps/sitemaps/delete-sitemap-by-id', data, $.proxy(function(response, textStatus) {
+      if (response.success) {
+        row.remove();
+      }
+
+      let customPageRows = document.querySelectorAll('#custom-pages tbody tr').length;
+
+      if (customPageRows <= 0) {
+        let customPagesTable = document.getElementById('custom-pages');
+        customPagesTable.remove();
+      }
+    }, this));
   }
 }
 
