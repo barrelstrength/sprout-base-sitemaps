@@ -59,11 +59,12 @@
         label: "URI"|t('sprout-base-sitemaps'),
         instructions: "The relative path of the Custom Page. The Base URL will be appended for you."|t('sprout-base-sitemaps'),
         id: "uri",
-        required: true,
         name: 'uri',
         value: (sitemapSection.uri == '__home__') ? "/" : sitemapSection.uri,
         errors: sitemapSection.getErrors('uri'),
-        first: true
+        first: true,
+        autofocus: true,
+        required: true
     }) }}
 
     {% set priorityList = {
