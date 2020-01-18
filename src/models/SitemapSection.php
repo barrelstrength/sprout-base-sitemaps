@@ -13,6 +13,8 @@ use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use craft\base\Model;
 use craft\helpers\UrlHelper;
 use Craft;
+use craft\models\Site;
+use yii\base\Exception;
 
 /**
  * Class SitemapSection
@@ -20,8 +22,8 @@ use Craft;
  * This class is used to manage the ajax updates of the sitemap settings on the
  * sitemap tab. The attributes are a subset of the Metadata
  *
- * @property null|\craft\models\Site                                      $site
- * @property null|\barrelstrength\sproutbaseuris\models\UrlEnabledSection $urlEnabledSection
+ * @property null|Site              $site
+ * @property null|UrlEnabledSection $urlEnabledSection
  */
 class SitemapSection extends Model
 {
@@ -104,7 +106,7 @@ class SitemapSection extends Model
     public $uid;
 
     /**
-     * @return \craft\models\Site|null
+     * @return Site|null
      */
     public function getSite()
     {
@@ -132,12 +134,14 @@ class SitemapSection extends Model
     /**
      * @inheritdoc
      */
-    public function rules(): array
+    public function defineRules(): array
     {
-        return [
-            [['uri'], 'sectionUri', 'on' => 'customSection'],
-            [['uri'], 'required', 'on' => 'customSection', 'message' => 'URI cannot be blank.'],
-        ];
+        $rules = parent::defineRules();
+
+        $rules [] = [['uri'], 'sectionUri', 'on' => 'customSection'];
+        $rules [] = [['uri'], 'required', 'on' => 'customSection', 'message' => 'URI cannot be blank.'];
+
+        return $rules;
     }
 
     /**
@@ -146,7 +150,7 @@ class SitemapSection extends Model
      *
      * @param $attribute
      *
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function sectionUri($attribute)
     {
