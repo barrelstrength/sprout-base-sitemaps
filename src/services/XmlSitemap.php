@@ -236,7 +236,7 @@ class XmlSitemap extends Component
                         'id' => $element->id,
                         'url' => $element->getUrl(),
                         'locale' => $site->language,
-                        'modified' => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+                        'modified' => $element->dateUpdated->format('Y-m-d\Th:i:s\Z'),
                         'priority' => $sitemapSection['priority'],
                         'changeFrequency' => $sitemapSection['changeFrequency'],
                     ];
@@ -339,7 +339,7 @@ class XmlSitemap extends Component
             }
 
             $modified = new DateTime($customSitemapSection['dateUpdated']);
-            $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
+            $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:i:s\Z');
 
             $urls[$customSitemapSection['uri']] = $customSitemapSection;
         }
@@ -384,7 +384,7 @@ class XmlSitemap extends Component
                 $customSitemapSection['url'] = $url;
 
                 $modified = new DateTime($customSitemapSection['dateUpdated']);
-                $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
+                $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:i:s\Z');
 
                 $urls[$customSitemapSection['uri']] = $customSitemapSection;
             }
