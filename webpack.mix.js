@@ -1,7 +1,6 @@
 const mix = require('laravel-mix');
 
 mix
-  // Sitemaps
   .sass(
     'src/web/assets/sitemaps/src/scss/sitemaps.scss',
     'src/web/assets/sitemaps/dist/css/sitemaps.css',

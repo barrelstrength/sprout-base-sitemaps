@@ -102,7 +102,7 @@ class SproutSeoSitemapIndex {
   }
 
   deleteCustomPage(event) {
-    console.log();
+
     let linkElement = event.target;
     let row = linkElement.parentElement.parentElement;
     let customPageId = row.getAttribute('data-id');
