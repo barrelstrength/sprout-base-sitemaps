@@ -17,6 +17,7 @@ use craft\events\RegisterTemplateRootsEvent;
 use Craft;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
+use yii\base\InvalidConfigException;
 use yii\base\Module;
 use craft\helpers\ArrayHelper;
 use craft\i18n\PhpMessageSource;
@@ -95,9 +96,19 @@ class SproutBaseSitemaps extends Module
         parent::__construct($id, $parent, $config);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function init()
     {
-        self::$app = new App();
+        parent::init();
+
+        $this->setComponents([
+            'app' => App::class
+        ]);
+
+        self::$app = $this->get('app');
+
         Craft::setAlias('@sproutbasesitemaps', $this->getBasePath());
 
         // Setup Controllers
@@ -120,7 +131,5 @@ class SproutBaseSitemaps extends Module
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $event->sender->set('sproutSitemap', SproutSitemapVariable::class);
         });
-
-        parent::init();
     }
 }
