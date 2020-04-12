@@ -8,23 +8,24 @@
 namespace barrelstrength\sproutbasesitemaps\services;
 
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
+use barrelstrength\sproutbasesitemaps\records\SitemapSection as SitemapSectionRecord;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\Entry;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutsitemaps\SproutSitemaps;
-use craft\base\Element;
-use craft\base\Plugin;
-use craft\elements\db\ElementQuery;
-use yii\base\Component;
-use craft\db\Query;
 use Craft;
-use DateTime;
+use craft\base\Element;
+use craft\db\Query;
+use craft\elements\db\ElementQuery;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\UrlHelper;
+use craft\models\Site;
+use DateTime;
+use yii\base\Component;
+use yii\base\Exception;
 
 /**
- *
- * @property \craft\models\Site[]|array $currentSitemapSites
+ * @property Site[]|array $currentSitemapSites
  */
 class XmlSitemap extends Component
 {
@@ -34,7 +35,7 @@ class XmlSitemap extends Component
      * @param $siteId
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSitemapIndex($siteId = null): array
     {
@@ -103,7 +104,7 @@ class XmlSitemap extends Component
         // Fetching all Custom Sitemap defined in Sprout SEO
         $customSitemapSections = (new Query())
             ->select('id')
-            ->from('{{%sproutseo_sitemaps}}')
+            ->from(SitemapSectionRecord::tableName())
             ->where(['enabled' => true])
             ->andWhere('type=:type', [':type' => NoSection::class])
             ->andWhere(['not', ['uri' => null]])
@@ -124,8 +125,8 @@ class XmlSitemap extends Component
      * @param $siteId
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId): array
     {
@@ -255,8 +256,8 @@ class XmlSitemap extends Component
     /**
      * Returns all sites to process for the current sitemap request
      *
-     * @return array|\craft\models\Site[]
-     * @throws \craft\errors\SiteNotFoundException
+     * @return array|Site[]
+     * @throws SiteNotFoundException
      */
     public function getCurrentSitemapSites(): array
     {
@@ -280,42 +281,12 @@ class XmlSitemap extends Component
     }
 
     /**
-     * @param $sitemapKey
-     * @param $siteId
-     *
-     * @return array
-     */
-    protected function getEnabledSitemapSections($sitemapKey, $siteId): array
-    {
-        $query = (new Query())
-            ->select('*')
-            ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = true and [[urlEnabledSectionId]] is not null')
-            ->andWhere('[[siteId]] = :siteId', [':siteId' => $siteId]);
-
-        if ($sitemapKey == 'singles') {
-            $query->andWhere('type = :type', [':type' => Entry::class]);
-        } else {
-            $query->andWhere('[[uniqueKey]] = :uniqueKey', [':uniqueKey' => $sitemapKey]);
-        }
-
-        $results = $query->all();
-
-        $sitemapSections = [];
-        foreach ($results as $result) {
-            $sitemapSections[] = new SitemapSection($result);
-        }
-
-        return $sitemapSections;
-    }
-
-    /**
      * Returns all Custom Section URLs
      *
      * @param $siteId
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      * @throws \Exception
      */
     public function getCustomSectionUrls($siteId): array
@@ -325,7 +296,7 @@ class XmlSitemap extends Component
         // Fetch all Custom Sitemap defined in Sprout SEO
         $customSitemapSections = (new Query())
             ->select('uri, priority, [[changeFrequency]], [[dateUpdated]]')
-            ->from('{{%sproutseo_sitemaps}}')
+            ->from(SitemapSectionRecord::tableName())
             ->where(['enabled' => true])
             ->andWhere('[[siteId]] = :siteId', [':siteId' => $siteId])
             ->andWhere('type=:type', [':type' => NoSection::class])
@@ -364,7 +335,7 @@ class XmlSitemap extends Component
 
         $customSitemapSections = (new Query())
             ->select('[[siteId]], uri, priority, [[changeFrequency]], [[dateUpdated]]')
-            ->from('{{%sproutseo_sitemaps}}')
+            ->from(SitemapSectionRecord::tableName())
             ->where(['enabled' => true])
             ->andWhere(['[[siteId]]' => $siteIds])
             ->andWhere('type=:type', [':type' => NoSection::class])
@@ -393,6 +364,82 @@ class XmlSitemap extends Component
         $urls = $this->getLocalizedSitemapStructure($urls);
 
         return $urls;
+    }
+
+    /**
+     * Returns the value for the totalElementsPerSitemap setting. Default is 500.
+     *
+     * @param int $total
+     *
+     * @return int
+     */
+    public function getTotalElementsPerSitemap($total = 500): int
+    {
+        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+//        /** @var Plugin $plugin */
+//        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
+//
+//        if (!$plugin) {
+//            /** @var Plugin $plugin */
+//            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
+//        }
+//
+//        /** @var Settings $settings */
+//        $settings = $plugin->getSettings();
+//        \Craft::dd($settings);
+//        if (isset($settings['totalElementsPerSitemap']) && $settings['totalElementsPerSitemap']) {
+//            $total = $settings['totalElementsPerSitemap'];
+//        }
+
+        return $settings['totalElementsPerSitemap'] ?? $total;
+    }
+
+    /**
+     * Remove Slash from URI
+     *
+     * @param string $uri
+     *
+     * @return string
+     */
+    public function removeSlash($uri): string
+    {
+        $slash = '/';
+
+        if (isset($uri[0]) && $uri[0] == $slash) {
+            $uri = ltrim($uri, $slash);
+        }
+
+        return $uri;
+    }
+
+    /**
+     * @param $sitemapKey
+     * @param $siteId
+     *
+     * @return array
+     */
+    protected function getEnabledSitemapSections($sitemapKey, $siteId): array
+    {
+        $query = (new Query())
+            ->select('*')
+            ->from(SitemapSectionRecord::tableName())
+            ->where('enabled = true and [[urlEnabledSectionId]] is not null')
+            ->andWhere('[[siteId]] = :siteId', [':siteId' => $siteId]);
+
+        if ($sitemapKey == 'singles') {
+            $query->andWhere('type = :type', [':type' => Entry::class]);
+        } else {
+            $query->andWhere('[[uniqueKey]] = :uniqueKey', [':uniqueKey' => $sitemapKey]);
+        }
+
+        $results = $query->all();
+
+        $sitemapSections = [];
+        foreach ($results as $result) {
+            $sitemapSections[] = new SitemapSection($result);
+        }
+
+        return $sitemapSections;
     }
 
     /**
@@ -431,50 +478,5 @@ class XmlSitemap extends Component
         }
 
         return $structure;
-    }
-
-    /**
-     * Returns the value for the totalElementsPerSitemap setting. Default is 500.
-     *
-     * @param int $total
-     *
-     * @return int
-     */
-    public function getTotalElementsPerSitemap($total = 500): int
-    {
-        /** @var Plugin $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
-
-        if (!$plugin) {
-            /** @var Plugin $plugin */
-            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        }
-
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
-
-        if (isset($settings['totalElementsPerSitemap']) && $settings['totalElementsPerSitemap']) {
-            $total = $settings['totalElementsPerSitemap'];
-        }
-
-        return $total;
-    }
-
-    /**
-     * Remove Slash from URI
-     *
-     * @param string $uri
-     *
-     * @return string
-     */
-    public function removeSlash($uri): string
-    {
-        $slash = '/';
-
-        if (isset($uri[0]) && $uri[0] == $slash) {
-            $uri = ltrim($uri, $slash);
-        }
-
-        return $uri;
     }
 }

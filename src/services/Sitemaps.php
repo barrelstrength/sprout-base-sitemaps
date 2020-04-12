@@ -53,7 +53,7 @@ class Sitemaps extends Component
     {
         $customSections = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_sitemaps}}'])
+            ->from([SitemapSectionRecord::tableName()])
             ->where('[[siteId]]=:siteId', [':siteId' => $siteId])
             ->andWhere('type=:type', [':type' => NoSection::class])
             ->all();
@@ -115,7 +115,7 @@ class Sitemaps extends Component
 
         $results = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_sitemaps}}'])
+            ->from([SitemapSectionRecord::tableName()])
             ->where(['type' => $type, '[[siteId]]' => $siteId])
             ->all();
 
@@ -141,7 +141,7 @@ class Sitemaps extends Component
     {
         $result = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_sitemaps}}'])
+            ->from([SitemapSectionRecord::tableName()])
             ->where(['id' => $id])
             ->one();
 
@@ -281,7 +281,7 @@ class Sitemaps extends Component
         }
 
         $affectedRows = Craft::$app->getDb()->createCommand()
-            ->delete('{{%sproutseo_sitemaps}}', [
+            ->delete(SitemapSectionRecord::tableName(), [
                 'id' => $id
             ])
             ->execute();
@@ -299,7 +299,7 @@ class Sitemaps extends Component
 
         $result = (new Query())
             ->select('[[uniqueKey]]')
-            ->from(['{{%sproutseo_sitemaps}}'])
+            ->from([SitemapSectionRecord::tableName()])
             ->where(['[[uniqueKey]]' => $key])
             ->scalar();
 
@@ -444,7 +444,7 @@ class Sitemaps extends Component
      */
     public function getSitemapsSettings(): Model
     {
-        $settings = SproutBase::$app->settings->getBaseSettings(Settings::class);
+        $settings = SproutBase::$app->settings->getBaseSettings(Settings::class, 'sprout-sitemaps');
 
         return $settings;
     }
@@ -452,7 +452,7 @@ class Sitemaps extends Component
     /**
      * @param array $settingsArray
      * @return int
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function saveSitemapsSettings(array $settingsArray)
     {

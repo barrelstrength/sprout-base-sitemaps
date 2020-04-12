@@ -7,15 +7,21 @@
 
 namespace barrelstrength\sproutbasesitemaps\migrations;
 
-use craft\db\Migration;
-use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
 use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
-use craft\db\Query;
+use barrelstrength\sproutbase\records\Settings as SproutBaseSettingsRecord;
+use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
+use barrelstrength\sproutbasesitemaps\records\SitemapSection as SitemapSectionRecord;
 use Craft;
+use craft\db\Migration;
+use craft\db\Query;
+use craft\db\Table;
+use craft\errors\SiteNotFoundException;
+use Throwable;
+use yii\base\Exception;
 
 /**
  *
- * @property \barrelstrength\sproutbasesitemaps\models\Settings $sproutSitemapSettingsModel
+ * @property SproutSitemapSettings $sproutSitemapSettingsModel
  */
 class Install extends Migration
 {
@@ -26,8 +32,8 @@ class Install extends Migration
 
     /**
      * @return bool
-     * @throws \Throwable
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws Throwable
+     * @throws SiteNotFoundException
      */
     public function safeUp(): bool
     {
@@ -39,15 +45,18 @@ class Install extends Migration
 
     /**
      * @return bool|void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function safeDown()
     {
-        $this->dropTable('{{%sproutseo_sitemaps}}');
-    }
+        // Delete Sitemap Settings
+        Craft::$app->getDb()->createCommand()
+            ->delete(SproutBaseSettingsRecord::tableName(), ['model', SproutSitemapSettings::class])
+            ->execute();
 
-    // Protected Methods
-    // =========================================================================
+        // Delete Sitemap Table
+        $this->dropTableIfExists(SitemapSectionRecord::tableName());
+    }
 
     protected function createTables()
     {
@@ -56,10 +65,8 @@ class Install extends Migration
         $migration->safeUp();
         ob_end_clean();
 
-        $table = '{{%sproutseo_sitemaps}}';
-
-        if (!$this->db->tableExists($table)) {
-            $this->createTable($table, [
+        if (!$this->db->tableExists(SitemapSectionRecord::tableName())) {
+            $this->createTable(SitemapSectionRecord::tableName(), [
                 'id' => $this->primaryKey(),
                 'siteId' => $this->integer()->notNull(),
                 'uniqueKey' => $this->string(),
@@ -81,30 +88,27 @@ class Install extends Migration
 
     protected function createIndexes()
     {
-        $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId']);
+        $this->createIndex(null, SitemapSectionRecord::tableName(), ['siteId']);
     }
 
     protected function addForeignKeys()
     {
-        $this->addForeignKey(null, '{{%sproutseo_sitemaps}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
+        $this->addForeignKey(null, SitemapSectionRecord::tableName(), ['siteId'], Table::SITES, ['id'], 'CASCADE', 'CASCADE');
     }
 
     /**
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\ErrorException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\NotSupportedException
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function insertDefaultSettings()
     {
         $settingsRow = (new Query())
             ->select(['*'])
-            ->from(['{{%sprout_settings}}'])
+            ->from([SproutBaseSettingsRecord::tableName()])
             ->where(['model' => SproutSitemapSettings::class])
             ->one();
 
-        if (is_null($settingsRow)){
+        if ($settingsRow === null) {
 
             $settings = new SproutSitemapSettings();
 
@@ -116,7 +120,7 @@ class Install extends Migration
                 'settings' => json_encode($settings->toArray())
             ];
 
-            $this->insert('{{%sprout_settings}}', $settingsArray);
+            $this->insert(SproutBaseSettingsRecord::tableName(), $settingsArray);
         }
     }
 }
