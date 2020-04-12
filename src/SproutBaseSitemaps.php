@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutbasesitemaps;
 
-use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbasesitemaps\controllers\SitemapsController;
 use barrelstrength\sproutbasesitemaps\controllers\XmlSitemapController;
 use barrelstrength\sproutbasesitemaps\services\App;
@@ -31,8 +30,6 @@ use yii\base\Event;
  */
 class SproutBaseSitemaps extends Module
 {
-    use BaseSproutTrait;
-
     /**
      * @var string
      */
@@ -44,13 +41,6 @@ class SproutBaseSitemaps extends Module
      * @var \barrelstrength\sproutbasesitemaps\services\App
      */
     public static $app;
-
-    /**
-     * Identify our plugin for BaseSproutTrait
-     *
-     * @var string
-     */
-    public static $pluginHandle = 'sprout-base-sitemaps';
 
     /**
      * @var string|null The translation category that this module translation messages should use. Defaults to the lowercase plugin handle.

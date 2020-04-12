@@ -207,9 +207,7 @@ class XmlSitemap extends Component
                     $noFollow = $robots['nofollow'] ?? $globalMetadata['robots']['nofollow'] ?? null;
 
                     if ($noIndex == 1 OR $noFollow == 1) {
-                        SproutSitemaps::info(Craft::t('sprout-base-sitemaps', 'Element ID {elementId} not added to sitemap. Element Metadata field `noindex` or `nofollow` settings are enabled.', [
-                            'elementId' => $element->id
-                        ]));
+                        Craft::info('Element ID '.$element->id.' not added to sitemap. Element Metadata field `noindex` or `nofollow` settings are enabled.', __METHOD__);
                         continue;
                     }
                     * */
@@ -217,18 +215,12 @@ class XmlSitemap extends Component
                     $canonicalOverride = $metadata['canonical'] ?? null;
 
                     if (!empty($canonicalOverride)) {
-                        SproutSitemaps::info(Craft::t('sprout-base-sitemaps', 'Element ID {elementId} is using a canonical override and has not been included in the sitemap. Element URL: {elementUrl}. Canonical URL: {canonicalUrl}.', [
-                            'elementId' => $element->id,
-                            'elementUrl' => $element->getUrl(),
-                            'canonicalUrl' => $canonicalOverride
-                        ]));
+                        Craft::info('Element ID '.$element->id.' is using a canonical override and has not been included in the sitemap. Element URL: '. $element->getUrl().'. Canonical URL: '.$canonicalOverride.'.', __METHOD__);
                         continue;
                     }
 
                     if ($element->getUrl() === null) {
-                        SproutSitemaps::info(Craft::t('sprout-base-sitemaps', 'Element ID {elementId} not added to sitemap. Element does not have a URL.', [
-                            'elementId' => $element->id
-                        ]));
+                        Craft::info('Element ID '.$element->id.' not added to sitemap. Element does not have a URL.', __METHOD__);
                         continue;
                     }
 
