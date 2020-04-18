@@ -16,8 +16,8 @@ use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use barrelstrength\sproutbasesitemaps\models\Settings as SproutBaseSitemapsSettings;
 use craft\base\Element;
-use craft\base\Model;
 use craft\errors\SiteNotFoundException;
+use Throwable;
 use yii\base\Component;
 use craft\db\Query;
 use Craft;
@@ -27,8 +27,8 @@ use yii\web\NotFoundHttpException;
 
 /**
  *
- * @property array                                              $transforms
  * @property SproutBaseSitemapsSettings $sitemapsSettings
+ * @property array    $transforms
  */
 class Sitemaps extends Component
 {
@@ -79,7 +79,7 @@ class Sitemaps extends Component
      * @param null                  $siteId
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function getSitemapSections(UrlEnabledSectionType $urlEnabledSectionType, $siteId = null): array
     {
@@ -105,7 +105,7 @@ class Sitemaps extends Component
      * @param $siteId
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function getSitemapSectionsByType($type, $siteId = null): array
     {
@@ -157,7 +157,7 @@ class Sitemaps extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function saveSitemapSection(SitemapSection $sitemapSection): bool
     {
@@ -202,7 +202,7 @@ class Sitemaps extends Component
         try {
             $sitemapSectionRecord->save(false);
             $transaction->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $sitemapSection->addErrors($sitemapSectionRecord->getErrors());
             $transaction->rollBack();
             throw $e;
@@ -317,7 +317,7 @@ class Sitemaps extends Component
      * @param null $siteId
      *
      * @return UrlEnabledSectionType[]
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function getUrlEnabledSectionTypesForSitemaps($siteId = null): array
     {
@@ -332,7 +332,7 @@ class Sitemaps extends Component
      * @param null $siteId
      *
      * @return null
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function prepareUrlEnabledSectionTypesForSitemaps($siteId = null)
     {
