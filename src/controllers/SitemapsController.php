@@ -51,7 +51,6 @@ class SitemapsController extends Controller
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
-        /** @var Settings $settings */
         $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
         $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $settings->enableMultilingualSitemaps;
 

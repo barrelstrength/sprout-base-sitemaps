@@ -368,22 +368,8 @@ class XmlSitemap extends Component
     public function getTotalElementsPerSitemap($total = 500): int
     {
         $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
-//        /** @var Plugin $plugin */
-//        $plugin = Craft::$app->plugins->getPlugin('sprout-sitemaps');
-//
-//        if (!$plugin) {
-//            /** @var Plugin $plugin */
-//            $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-//        }
-//
-//        /** @var Settings $settings */
-//        $settings = $plugin->getSettings();
-//        \Craft::dd($settings);
-//        if (isset($settings['totalElementsPerSitemap']) && $settings['totalElementsPerSitemap']) {
-//            $total = $settings['totalElementsPerSitemap'];
-//        }
 
-        return $settings['totalElementsPerSitemap'] ?? $total;
+        return $settings->totalElementsPerSitemap ?? $total;
     }
 
     /**

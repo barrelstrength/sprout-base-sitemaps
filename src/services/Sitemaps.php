@@ -14,7 +14,7 @@ use barrelstrength\sproutbaseuris\base\UrlEnabledSectionType;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutbasesitemaps\models\Settings;
+use barrelstrength\sproutbasesitemaps\models\Settings as SproutBaseSitemapsSettings;
 use craft\base\Element;
 use craft\base\Model;
 use craft\errors\SiteNotFoundException;
@@ -27,8 +27,8 @@ use yii\web\NotFoundHttpException;
 
 /**
  *
- * @property \barrelstrength\sproutbasesitemaps\models\Settings $sitemapsSettings
  * @property array                                              $transforms
+ * @property SproutBaseSitemapsSettings $sitemapsSettings
  */
 class Sitemaps extends Component
 {
@@ -440,11 +440,12 @@ class Sitemaps extends Component
     }
 
     /**
-     * @return Model
+     * @return SproutBaseSitemapsSettings
      */
-    public function getSitemapsSettings(): Model
+    public function getSitemapsSettings(): SproutBaseSitemapsSettings
     {
-        $settings = SproutBase::$app->settings->getBaseSettings(Settings::class, 'sprout-sitemaps');
+        /** @var SproutBaseSitemapsSettings $settings */
+        $settings = SproutBase::$app->settings->getBaseSettings(SproutBaseSitemapsSettings::class, 'sprout-sitemaps');
 
         return $settings;
     }
@@ -454,9 +455,9 @@ class Sitemaps extends Component
      * @return int
      * @throws Exception
      */
-    public function saveSitemapsSettings(array $settingsArray)
+    public function saveSitemapsSettings(array $settingsArray): int
     {
-        $result = SproutBase::$app->settings->saveBaseSettings($settingsArray,Settings::class);
+        $result = SproutBase::$app->settings->saveBaseSettings($settingsArray,SproutBaseSitemapsSettings::class);
 
         return $result;
     }
