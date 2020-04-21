@@ -21,9 +21,15 @@ class App extends Component
      */
     public $xmlSitemap;
 
+    /**
+     * @var Settings
+     */
+    public $settings;
+
     public function init()
     {
         $this->sitemaps = new Sitemaps();
         $this->xmlSitemap = new XmlSitemap();
+        $this->settings = new Settings();
     }
 }

@@ -253,7 +253,7 @@ class XmlSitemap extends Component
      */
     public function getCurrentSitemapSites(): array
     {
-        $pluginSettings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+        $pluginSettings = SproutBaseSitemaps::$app->settings->getSitemapsSettings();
 
         $currentSite = Craft::$app->sites->getCurrentSite();
         $isMultisite = Craft::$app->getIsMultiSite();
@@ -367,7 +367,7 @@ class XmlSitemap extends Component
      */
     public function getTotalElementsPerSitemap($total = 500): int
     {
-        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+        $settings = SproutBaseSitemaps::$app->settings->getSitemapsSettings();
 
         return $settings->totalElementsPerSitemap ?? $total;
     }

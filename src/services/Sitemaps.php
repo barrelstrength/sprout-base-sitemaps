@@ -211,7 +211,7 @@ class Sitemaps extends Component
         // update id on model (for new records)
         $sitemapSection->id = $sitemapSectionRecord->id;
 
-        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+        $settings = SproutBaseSitemaps::$app->settings->getSitemapsSettings();
 
         // Copy this site behavior to the whole group, for the Url-Enabled Sitemaps
         // Custom Sections will be allowed to be unique, even in Multi-Lingual Sitemaps
@@ -437,28 +437,5 @@ class Sitemaps extends Component
         }
 
         return [];
-    }
-
-    /**
-     * @return SproutBaseSitemapsSettings
-     */
-    public function getSitemapsSettings(): SproutBaseSitemapsSettings
-    {
-        /** @var SproutBaseSitemapsSettings $settings */
-        $settings = SproutBase::$app->settings->getBaseSettings(SproutBaseSitemapsSettings::class, 'sprout-sitemaps');
-
-        return $settings;
-    }
-
-    /**
-     * @param array $settingsArray
-     * @return int
-     * @throws Exception
-     */
-    public function saveSitemapsSettings(array $settingsArray): int
-    {
-        $result = SproutBase::$app->settings->saveBaseSettings($settingsArray,SproutBaseSitemapsSettings::class);
-
-        return $result;
     }
 }

@@ -47,7 +47,7 @@ class XmlSitemapController extends Controller
         $multiSiteSiteIds = [];
         $sitesInGroup = [];
 
-        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+        $settings = SproutBaseSitemaps::$app->settings->getSitemapsSettings();
 
         if (!$settings->enableDynamicSitemaps) {
             throw new NotFoundHttpException('XML Sitemap not enabled.');
