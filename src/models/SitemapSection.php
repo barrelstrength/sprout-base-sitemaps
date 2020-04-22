@@ -10,10 +10,12 @@ namespace barrelstrength\sproutbasesitemaps\models;
 
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
-use craft\base\Model;
-use craft\helpers\UrlHelper;
 use Craft;
+use craft\base\Model;
+use craft\errors\SiteNotFoundException;
+use craft\helpers\UrlHelper;
 use craft\models\Site;
+use DateTime;
 use yii\base\Exception;
 
 /**
@@ -68,6 +70,7 @@ class SitemapSection extends Model
     public $enabled;
 
     // Attributes assigned from URL-Enabled Section integration
+
     /**
      * @var string
      */
@@ -91,12 +94,12 @@ class SitemapSection extends Model
     public $isNew;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $dateCreated;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $dateUpdated;
 
@@ -115,7 +118,7 @@ class SitemapSection extends Model
 
     /**
      * @return UrlEnabledSection|null
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function getUrlEnabledSection()
     {

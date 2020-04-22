@@ -8,7 +8,7 @@
 
     {% if isCustom is defined and isCustom %}
         <a href="{{ cpUrl(pluginHandle ~ '/sitemaps/edit/' ~ sitemapSection.id ~ '/' ~ sitemapSection.getSite().handle) }}"
-           class="sproutseo-sectiontitle">
+            class="sproutseo-sectiontitle">
             <code>{{ sitemapSection.uri }}</code>
         </a>
     {% else %}
@@ -19,15 +19,15 @@
         {% endif %}
 
         <input type="hidden"
-               name="sproutseo[sections][{{ urlEnabledSectionKey }}][uri]"
-               value="{{ sitemapSection.uri }}">
+            name="sproutseo[sections][{{ urlEnabledSectionKey }}][uri]"
+            value="{{ sitemapSection.uri }}">
     {% endif %}
 
 
     {% if urlEnabledSectionKey is defined %}
         <input type="hidden"
-               name="sproutseo[sections][{{ urlEnabledSectionKey }}][id]"
-               value="{{ urlEnabledSectionKey }}">
+            name="sproutseo[sections][{{ urlEnabledSectionKey }}][id]"
+            value="{{ urlEnabledSectionKey }}">
     {% endif %}
 
 </strong>

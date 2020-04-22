@@ -2,8 +2,13 @@
 
 namespace barrelstrength\sproutbasesitemaps\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutsitemaps\migrations\Install as SproutBaseSitemapsInstallMigration;
+use craft\db\Migration;
+use craft\errors\SiteNotFoundException;
+use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\base\NotSupportedException;
+use yii\web\ServerErrorHttpException;
 
 /**
  * m190412_000000_recheck_default_settings migration.
@@ -12,11 +17,11 @@ class m190412_000000_recheck_default_settings extends Migration
 {
     /**
      * @return bool
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\ErrorException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\NotSupportedException
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws SiteNotFoundException
+     * @throws ErrorException
+     * @throws Exception
+     * @throws NotSupportedException
+     * @throws ServerErrorHttpException
      */
     public function safeUp(): bool
     {
@@ -24,6 +29,7 @@ class m190412_000000_recheck_default_settings extends Migration
 
 //        if ($this->db->tableExists($oldTable)){
         $installMigration->insertDefaultSettings();
+
 //        }
 
         return true;
@@ -35,6 +41,7 @@ class m190412_000000_recheck_default_settings extends Migration
     public function safeDown(): bool
     {
         echo "m190412_000000_recheck_default_settings cannot be reverted.\n";
+
         return false;
     }
 }

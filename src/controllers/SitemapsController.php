@@ -8,18 +8,18 @@
 namespace barrelstrength\sproutbasesitemaps\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbasesitemaps\models\Settings;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutbasesitemaps\models\Settings;
+use Craft;
 use craft\errors\SiteNotFoundException;
 use craft\web\Controller;
-use Craft;
 use Throwable;
 use yii\db\Exception;
 use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**

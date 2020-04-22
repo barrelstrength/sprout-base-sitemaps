@@ -8,8 +8,10 @@
 namespace barrelstrength\sproutbasesitemaps\web\twig\variables;
 
 use Craft;
-
+use craft\base\ElementInterface;
 use DateTime;
+use DateTimeZone;
+use Exception;
 
 /**
  * Class SproutSitemapVariable
@@ -21,7 +23,7 @@ class SproutSitemapVariable
     /**
      * @param $id
      *
-     * @return \craft\base\ElementInterface|null
+     * @return ElementInterface|null
      */
     public function getElementById($id)
     {
@@ -34,11 +36,11 @@ class SproutSitemapVariable
      * @param $string
      *
      * @return DateTime
-     * @throws \Exception
+     * @throws Exception
      */
     public function getDate($string): DateTime
     {
-        return new DateTime($string['date'], new \DateTimeZone(Craft::$app->getTimeZone()));
+        return new DateTime($string['date'], new DateTimeZone(Craft::$app->getTimeZone()));
     }
 
     /**

@@ -25,21 +25,21 @@
 
     <div class="btngroup submit first">
         <input type="submit" class="btn submit"
-               value="{{ 'Save'|t('sprout-base-sitemaps') }}">
+            value="{{ 'Save'|t('sprout-base-sitemaps') }}">
         <div class="btn submit menubtn"></div>
         <div class="menu">
             <ul>
                 <li><a class="formsubmit"
-                       data-redirect="{{ continueEditingUrl|hash }}">{{ "Save and continue editing"|t('sprout-base-sitemaps') }}
+                        data-redirect="{{ continueEditingUrl|hash }}">{{ "Save and continue editing"|t('sprout-base-sitemaps') }}
                         <span class="shortcut">⌘S</span></a></li>
             </ul>
             <hr>
             <ul>
                 {% set afterDeleteRedirectUrl = pluginHandle ~ '/sitemaps' %}
                 <li><a class="formsubmit error"
-                       data-action="sprout-base-sitemaps/sitemaps/delete-sitemap-by-id"
-                       data-confirm="{{ "Are you sure you want to delete this Custom Page?"|t('sprout-base-sitemaps') }}"
-                       data-redirect="{{ afterDeleteRedirectUrl|hash }}">{{ "Delete"|t('sprout-base-sitemaps') }}</a>
+                        data-action="sprout-base-sitemaps/sitemaps/delete-sitemap-by-id"
+                        data-confirm="{{ "Are you sure you want to delete this Custom Page?"|t('sprout-base-sitemaps') }}"
+                        data-redirect="{{ afterDeleteRedirectUrl|hash }}">{{ "Delete"|t('sprout-base-sitemaps') }}</a>
                 </li>
             </ul>
         </div>

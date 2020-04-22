@@ -12,7 +12,6 @@ use barrelstrength\sproutbasesitemaps\records\SitemapSection as SitemapSectionRe
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\Entry;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutsitemaps\SproutSitemaps;
 use Craft;
 use craft\base\Element;
 use craft\db\Query;
@@ -215,7 +214,7 @@ class XmlSitemap extends Component
                     $canonicalOverride = $metadata['canonical'] ?? null;
 
                     if (!empty($canonicalOverride)) {
-                        Craft::info('Element ID '.$element->id.' is using a canonical override and has not been included in the sitemap. Element URL: '. $element->getUrl().'. Canonical URL: '.$canonicalOverride.'.', __METHOD__);
+                        Craft::info('Element ID '.$element->id.' is using a canonical override and has not been included in the sitemap. Element URL: '.$element->getUrl().'. Canonical URL: '.$canonicalOverride.'.', __METHOD__);
                         continue;
                     }
 

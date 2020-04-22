@@ -54,44 +54,6 @@ class Install extends Migration
         $this->removeSharedSettings();
     }
 
-    protected function createTables()
-    {
-        $migration = new SproutBaseInstall();
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-
-        if (!$this->db->tableExists(SitemapSectionRecord::tableName())) {
-            $this->createTable(SitemapSectionRecord::tableName(), [
-                'id' => $this->primaryKey(),
-                'siteId' => $this->integer()->notNull(),
-                'uniqueKey' => $this->string(),
-                'urlEnabledSectionId' => $this->integer(),
-                'enabled' => $this->boolean()->defaultValue(false),
-                'type' => $this->string(),
-                'uri' => $this->string(),
-                'priority' => $this->decimal(11, 1),
-                'changeFrequency' => $this->string(),
-                'dateCreated' => $this->dateTime()->notNull(),
-                'dateUpdated' => $this->dateTime()->notNull(),
-                'uid' => $this->uid(),
-            ]);
-
-            $this->createIndexes();
-            $this->addForeignKeys();
-        }
-    }
-
-    protected function createIndexes()
-    {
-        $this->createIndex(null, SitemapSectionRecord::tableName(), ['siteId']);
-    }
-
-    protected function addForeignKeys()
-    {
-        $this->addForeignKey(null, SitemapSectionRecord::tableName(), ['siteId'], Table::SITES, ['id'], 'CASCADE', 'CASCADE');
-    }
-
     /**
      * @throws SiteNotFoundException
      * @throws Exception
@@ -133,5 +95,43 @@ class Install extends Migration
                 'model' => SproutSitemapSettings::class
             ]);
         }
+    }
+
+    protected function createTables()
+    {
+        $migration = new SproutBaseInstall();
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+
+        if (!$this->db->tableExists(SitemapSectionRecord::tableName())) {
+            $this->createTable(SitemapSectionRecord::tableName(), [
+                'id' => $this->primaryKey(),
+                'siteId' => $this->integer()->notNull(),
+                'uniqueKey' => $this->string(),
+                'urlEnabledSectionId' => $this->integer(),
+                'enabled' => $this->boolean()->defaultValue(false),
+                'type' => $this->string(),
+                'uri' => $this->string(),
+                'priority' => $this->decimal(11, 1),
+                'changeFrequency' => $this->string(),
+                'dateCreated' => $this->dateTime()->notNull(),
+                'dateUpdated' => $this->dateTime()->notNull(),
+                'uid' => $this->uid(),
+            ]);
+
+            $this->createIndexes();
+            $this->addForeignKeys();
+        }
+    }
+
+    protected function createIndexes()
+    {
+        $this->createIndex(null, SitemapSectionRecord::tableName(), ['siteId']);
+    }
+
+    protected function addForeignKeys()
+    {
+        $this->addForeignKey(null, SitemapSectionRecord::tableName(), ['siteId'], Table::SITES, ['id'], 'CASCADE', 'CASCADE');
     }
 }

@@ -9,7 +9,7 @@
     <input type="hidden" name="siteId" value="{{ currentSite.id }}">
 
     <div class="sproutseo-section-header"
-         style="display: flex;align-items: center;{% if enableMultilingualSitemaps and currentSite.id != firstSiteInGroup.id %}padding:18px 24px 17px;{% endif %}">
+        style="display: flex;align-items: center;{% if enableMultilingualSitemaps and currentSite.id != firstSiteInGroup.id %}padding:18px 24px 17px;{% endif %}">
         <div style="flex-grow: 1;">
             <h3 style="text-transform: uppercase;">{{ "Sections"|t }}
                 <span class="info">{{ "Manage all of your Section-level SEO for Search, Social Sharing, Sitemaps, and Structured Data."|t }}</span>
@@ -19,7 +19,7 @@
             {% if enableMultilingualSitemaps and currentSite.id != firstSiteInGroup.id %}
                 <div class="buttons right">
                     <a class="btn submit icon"
-                       href="{{ url(pluginHandle ~ '/sitemaps') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit {group} Sitemap"|t('sprout-base-sitemaps', {
+                        href="{{ url(pluginHandle ~ '/sitemaps') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit {group} Sitemap"|t('sprout-base-sitemaps', {
                             group: siteGroup.name
                         }) }}</a>
                 </div>
@@ -98,14 +98,14 @@
     {% if pluginSettings.enableCustomSections %}
 
         <div class="sproutseo-section-header"
-             style="display: flex;align-items: center;margin-top:40px;">
+            style="display: flex;align-items: center;margin-top:40px;">
             <div style="flex-grow: 1;">
                 <h3 style="text-transform: uppercase;">{{ "Custom Pages"|t }}</h3>
             </div>
             <div style="flex-shrink: 0;">
                 <div class="buttons right">
                     <a class="btn submit add icon"
-                       href="{{ url(pluginHandle ~ '/sitemaps/new/' ~ currentSite.handle) }}">{{ "Custom URL"|t }}</a>
+                        href="{{ url(pluginHandle ~ '/sitemaps/new/' ~ currentSite.handle) }}">{{ "Custom URL"|t }}</a>
                 </div>
             </div>
         </div>

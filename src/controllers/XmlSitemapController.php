@@ -9,10 +9,9 @@ namespace barrelstrength\sproutbasesitemaps\controllers;
 
 
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
+use Craft;
 use craft\errors\SiteNotFoundException;
 use craft\web\Controller;
-
-use Craft;
 use Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;

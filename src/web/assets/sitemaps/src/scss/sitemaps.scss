@@ -7,9 +7,9 @@
 /* Sections & Sitemap
 ------------------------------------------------------------ */
 .btn .disabled {
-    cursor: none;
-    color: black;
     background-color: grey;
+    color: black;
+    cursor: none;
 }
 
 .no-link {
@@ -18,18 +18,18 @@
 
 .sitemap-custom-url:focus {
     border: 1px solid rgba(0, 0, 0, 0.15);
-    padding: 6px 4px;
     outline: none;
+    padding: 6px 4px;
 }
 
 .sitemap-custom-url {
+    background: #ffffff;
+    border: none;
     display: inline-block;
     margin-left: -4px;
-    width: 85%;
-    border: none;
-    padding: 7px 5px;
-    background: #ffffff;
     overflow: hidden;
+    padding: 7px 5px;
+    width: 85%;
 }
 
 .sitemap-settings {
@@ -46,12 +46,12 @@
 
 .sproutseo-section-header {
     background-color: #cccccc;
-    margin: -24px -24px 20px;
-    padding: 24px;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f9fafa));
     background-image: linear-gradient(#ffffff, #f9fafa);
     -webkit-box-shadow: 0 2px 1px -2px rgba(0, 0, 0, 0.2);
     box-shadow: 0 2px 1px -2px rgba(0, 0, 0, 0.2);
+    margin: -24px -24px 20px;
+    padding: 24px;
 }
 
 .sitemap-settings {

@@ -10,17 +10,16 @@ namespace barrelstrength\sproutbasesitemaps;
 use barrelstrength\sproutbasesitemaps\controllers\SitemapsController;
 use barrelstrength\sproutbasesitemaps\controllers\XmlSitemapController;
 use barrelstrength\sproutbasesitemaps\services\App;
-
 use barrelstrength\sproutbasesitemaps\web\twig\variables\SproutSitemapVariable;
-use craft\events\RegisterTemplateRootsEvent;
 use Craft;
-use craft\web\twig\variables\CraftVariable;
-use craft\web\View;
-use yii\base\InvalidConfigException;
-use yii\base\Module;
+use craft\events\RegisterTemplateRootsEvent;
 use craft\helpers\ArrayHelper;
 use craft\i18n\PhpMessageSource;
+use craft\web\twig\variables\CraftVariable;
+use craft\web\View;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
+use yii\base\Module;
 
 /**
  *
@@ -31,16 +30,16 @@ use yii\base\Event;
 class SproutBaseSitemaps extends Module
 {
     /**
+     * Enable use of SproutSeo::$app-> in place of Craft::$app->
+     *
+     * @var App
+     */
+    public static $app;
+
+    /**
      * @var string
      */
     public $handle;
-
-    /**
-     * Enable use of SproutSeo::$app-> in place of Craft::$app->
-     *
-     * @var \barrelstrength\sproutbasesitemaps\services\App
-     */
-    public static $app;
 
     /**
      * @var string|null The translation category that this module translation messages should use. Defaults to the lowercase plugin handle.

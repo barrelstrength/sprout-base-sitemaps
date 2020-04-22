@@ -7,28 +7,27 @@
 
 namespace barrelstrength\sproutbasesitemaps\services;
 
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use barrelstrength\sproutbaseuris\SproutBaseUris;
-use barrelstrength\sproutbaseuris\base\UrlEnabledSectionType;
+use barrelstrength\sproutbasesitemaps\models\Settings as SproutBaseSitemapsSettings;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
+use barrelstrength\sproutbasesitemaps\records\SitemapSection as SitemapSectionRecord;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
+use barrelstrength\sproutbaseuris\base\UrlEnabledSectionType;
 use barrelstrength\sproutbaseuris\models\UrlEnabledSection;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
-use barrelstrength\sproutbasesitemaps\models\Settings as SproutBaseSitemapsSettings;
+use barrelstrength\sproutbaseuris\SproutBaseUris;
+use Craft;
 use craft\base\Element;
+use craft\db\Query;
 use craft\errors\SiteNotFoundException;
 use Throwable;
 use yii\base\Component;
-use craft\db\Query;
-use Craft;
-use barrelstrength\sproutbasesitemaps\records\SitemapSection as SitemapSectionRecord;
 use yii\db\Exception;
 use yii\web\NotFoundHttpException;
 
 /**
  *
  * @property SproutBaseSitemapsSettings $sitemapsSettings
- * @property array    $transforms
+ * @property array                      $transforms
  */
 class Sitemaps extends Component
 {
@@ -165,7 +164,7 @@ class Sitemaps extends Component
 
         if (!$isNewSection) {
             if (null === ($sitemapSectionRecord = SitemapSectionRecord::findOne($sitemapSection->id))) {
-                throw new Exception('Unable to find Sitemap with ID: ' . $sitemapSection->id);
+                throw new Exception('Unable to find Sitemap with ID: '.$sitemapSection->id);
             }
         } else {
             $sitemapSectionRecord = new SitemapSectionRecord();
