@@ -117,7 +117,7 @@ class SproutBaseSitemaps extends Module
             $e->roots['sprout-base-sitemaps'] = $this->getBasePath().DIRECTORY_SEPARATOR.'templates';
         });
 
-        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, static function(Event $event) {
             $event->sender->set('sproutSitemap', SproutSitemapVariable::class);
         });
     }

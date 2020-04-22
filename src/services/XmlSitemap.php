@@ -442,7 +442,6 @@ class XmlSitemap extends Component
                 $structure[] = $locations;
             } else {
                 // Looping through each element and adding it as primary and creating its alternates
-                /** @noinspection ForeachSourceInspection */
                 foreach ($locations as $index => $location) {
                     // Add secondary locations as alternatives to primary
                     if (count($locations) > 1) {

@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutbasesitemaps\web\assets\sitemaps;
 
-use barrelstrength\sproutbasesitemaps\web\assets\base\BaseAsset;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
