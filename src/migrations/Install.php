@@ -49,13 +49,9 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        // Delete Sitemap Settings
-        Craft::$app->getDb()->createCommand()
-            ->delete(SproutBaseSettingsRecord::tableName(), ['model', SproutSitemapSettings::class])
-            ->execute();
-
         // Delete Sitemap Table
         $this->dropTableIfExists(SitemapSectionRecord::tableName());
+        $this->removeSharedSettings();
     }
 
     protected function createTables()
@@ -121,6 +117,21 @@ class Install extends Migration
             ];
 
             $this->insert(SproutBaseSettingsRecord::tableName(), $settingsArray);
+        }
+    }
+
+    public function removeSharedSettings()
+    {
+        $settingsExist = (new Query())
+            ->select(['*'])
+            ->from([SproutBaseSettingsRecord::tableName()])
+            ->where(['model' => SproutSitemapSettings::class])
+            ->exists();
+
+        if ($settingsExist) {
+            $this->delete(SproutBaseSettingsRecord::tableName(), [
+                'model' => SproutSitemapSettings::class
+            ]);
         }
     }
 }
