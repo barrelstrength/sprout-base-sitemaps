@@ -7,14 +7,14 @@
 
 namespace barrelstrength\sproutbasesitemaps\controllers;
 
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbasesitemaps\models\Settings;
+use barrelstrength\sproutbase\base\SharedPermissionsInterface;
+use barrelstrength\sproutbase\controllers\SharedController;
+use barrelstrength\sproutbasesitemaps\models\Settings as SproutBaseSitemapsSettings;
 use barrelstrength\sproutbasesitemaps\models\SitemapSection;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbaseuris\sectiontypes\NoSection;
 use Craft;
 use craft\errors\SiteNotFoundException;
-use craft\web\Controller;
 use Throwable;
 use yii\db\Exception;
 use yii\web\BadRequestHttpException;
@@ -22,24 +22,27 @@ use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-/**
- * Class SitemapsController
- */
-class SitemapsController extends Controller
+class SitemapsController extends SharedController
 {
-    private $permissions = [];
-
-    public function init()
+    /**
+     * @return string
+     */
+    public function getDefaultPluginHandle(): string
     {
-        $this->permissions = SproutBase::$app->settings->getPluginPermissions(new Settings(), 'sprout-sitemaps');
+        return 'sprout-sitemaps';
+    }
 
-        parent::init();
+    /**
+     * @return SharedPermissionsInterface|null
+     */
+    public function getSharedSettingsModel()
+    {
+        return new SproutBaseSitemapsSettings();
     }
 
     /**
      * Renders the Sitemap Index Page
      *
-     * @param string      $pluginHandle
      * @param string|null $siteHandle
      *
      * @return Response
@@ -47,7 +50,7 @@ class SitemapsController extends Controller
      * @throws NotFoundHttpException
      * @throws SiteNotFoundException
      */
-    public function actionSitemapIndexTemplate(string $pluginHandle, string $siteHandle = null): Response
+    public function actionSitemapIndexTemplate(string $siteHandle = null): Response
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
@@ -130,14 +133,13 @@ class SitemapsController extends Controller
             'urlEnabledSectionTypes' => $urlEnabledSectionTypes,
             'customSections' => $customSections,
             'pluginSettings' => $settings,
-            'pluginHandle' => $pluginHandle
+            'pluginHandle' => $this->pluginHandle
         ]);
     }
 
     /**
      * Renders a Sitemap Edit Page
      *
-     * @param string              $pluginHandle
      * @param int|null            $sitemapSectionId
      * @param string|null         $siteHandle
      * @param SitemapSection|null $sitemapSection
@@ -146,7 +148,7 @@ class SitemapsController extends Controller
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      */
-    public function actionSitemapEditTemplate(string $pluginHandle, int $sitemapSectionId = null, string $siteHandle = null, SitemapSection $sitemapSection = null): Response
+    public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null, SitemapSection $sitemapSection = null): Response
     {
         $this->requirePermission($this->permissions['sproutSitemaps-editSitemaps']);
 
@@ -173,7 +175,7 @@ class SitemapsController extends Controller
             }
         }
 
-        $continueEditingUrl = $pluginHandle.'/sitemaps/edit/{id}/'.$currentSite->handle;
+        $continueEditingUrl = $this->pluginHandle.'/sitemaps/edit/{id}/'.$currentSite->handle;
 
         $tabs = [
             [
@@ -188,7 +190,7 @@ class SitemapsController extends Controller
             'sitemapSection' => $sitemapSection,
             'continueEditingUrl' => $continueEditingUrl,
             'tabs' => $tabs,
-            'pluginHandle' => $pluginHandle
+            'pluginHandle' => $this->pluginHandle
         ]);
     }
 
