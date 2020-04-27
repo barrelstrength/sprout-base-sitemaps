@@ -1,5 +1,13 @@
 {% import "_includes/forms" as forms %}
 
+{% macro configWarning(setting) -%}
+    {{ "This is being overridden by the {setting} config setting."|t('sprout-forms-google-recaptcha', {
+        setting: setting
+    })|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
 <input type="hidden" name="sproutBaseSettingsType" value="{{ className(settings) }}">
 
 {{ forms.lightswitchField({
@@ -9,7 +17,8 @@
     toggle: 'settings-total-elements',
     on: settings.enableDynamicSitemaps,
     onLabel: "Enable"|t,
-    first: true
+    first: true,
+    warning: config.enableDynamicSitemaps is defined ? configWarning('enableDynamicSitemaps')
 }) }}
 
 {{ forms.textField({
@@ -19,7 +28,8 @@
     placeholder: '500',
     size:'10',
     value: settings.totalElementsPerSitemap,
-    errors: ''
+    errors: '',
+    warning: config.totalElementsPerSitemap is defined ? configWarning('totalElementsPerSitemap')
 }) }}
 
 <hr>
@@ -31,7 +41,8 @@
         name: 'enableMultilingualSitemaps',
         on: settings.enableMultilingualSitemaps,
         id: 'enableMultilingualSitemaps',
-        onLabel: "Enable"|t
+        onLabel: "Enable"|t,
+        warning: config.enableMultilingualSitemaps is defined ? configWarning('enableMultilingualSitemaps')
     }) }}
 
     {% set siteRows = [] %}
@@ -90,7 +101,8 @@
             },
             rows: siteRows,
             staticRows: true,
-            errors: siteErrors|unique
+            errors: siteErrors|unique,
+            warning: config.sites is defined ? configWarning('sites')
         }) }}
     </div>
 
@@ -113,7 +125,8 @@
             },
             rows: siteGroupRows,
             staticRows: true,
-            errors: groupErrors|unique
+            errors: groupErrors|unique,
+            warning: config.groups is defined ? configWarning('groups')
         }) }}
     </div>
 
@@ -126,7 +139,8 @@
     instructions: "Add a section on the Sitemaps tab to manage Custom Pages that exist outside of any URL-Enabled Sections."|t,
     name: 'enableCustomSections',
     on: (settings.enableCustomSections is empty ? false : true),
-    onLabel: "Enable"|t
+    onLabel: "Enable"|t,
+    warning: config.enableCustomSections is defined ? configWarning('enableCustomSections')
 }) }}
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbasesitemaps\\web\\assets\\sitemaps\\SitemapsAsset") %}
