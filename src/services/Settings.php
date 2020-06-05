@@ -38,10 +38,8 @@ class Settings extends Component
      * @return int
      * @throws Exception
      */
-    public function saveSitemapsSettings(array $settingsArray): int
+    public function saveSitemapsSettings(array $settingsArray)
     {
-        $result = SproutBase::$app->settings->saveBaseSettings($settingsArray, SproutBaseSitemapsSettings::class);
-
-        return $result;
+        return SproutBase::$app->settings->saveBaseSettings($settingsArray, SproutBaseSitemapsSettings::class);
     }
 }
