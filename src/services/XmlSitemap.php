@@ -167,10 +167,11 @@ class XmlSitemap extends Component
                     $query->offset($offset);
                     $query->limit($totalElementsPerSitemap);
                     $query->site($site);
-                    $query->enabledForSite();
 
                     if ($urlEnabledSectionType->getElementLiveStatus()) {
                         $query->status($urlEnabledSectionType->getElementLiveStatus());
+                    }else {
+                        $query->status(Element::STATUS_ENABLED);
                     }
 
                     if ($sitemapKey === 'singles') {
