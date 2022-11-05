@@ -2,6 +2,11 @@
 
 A collection of common list classes and libraries for the Sprout Plugins Suite for Craft CMS.
 
+## Resources
+
+- [Report issues](https://github.com/barrelstrength/craft-sprout-sitemaps/issues) to the [Sprout Sitemaps](https://github.com/barrelstrength/craft-sprout-sitemaps) plugin repository.
+- Pull Requests should reference an open issue in the Sprout Sitemaps plugin repository
+
 ## Usage
 
 Include Sprout Base Sitemaps in your Sprout plugin composer.json file:
